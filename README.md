@@ -588,9 +588,6 @@ Building tools that make React Native development faster and more reliable.
 **About Me:**
 React Native developer passionate about AI-augmented development, accessibility, and building production-ready mobile apps. This project represents my approach to systematic code quality and automated best practices enforcement.
 
-**Other Projects:**
-- [Add your other portfolio projects here]
-
 ---
 
 ## 🙏 Acknowledgments
