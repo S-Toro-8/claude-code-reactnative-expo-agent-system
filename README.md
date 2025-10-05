@@ -586,6 +586,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 - 🌐 **Website:** https://yourwebsite.com (update this)
 
 **About Me:**
+
 React Native developer passionate about AI-augmented development, accessibility, and building production-ready mobile apps. This project represents my approach to systematic code quality and automated best practices enforcement.
 
 ---
