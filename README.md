@@ -578,8 +578,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 *Building tools that make React Native development faster and more reliable.*
 
-Building tools that make React Native development faster and more reliable.
-
 **Connect:**
 - 💼 **Portfolio:** https://yourportfolio.com (update this)
 - 💻 **GitHub:** [@S-Toro-8](https://github.com/S-Toro-8)
