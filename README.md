@@ -576,6 +576,8 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **SenaiVerse**
 
+*Building tools that make React Native development faster and more reliable.*
+
 Building tools that make React Native development faster and more reliable.
 
 **Connect:**
