@@ -1,0 +1,92 @@
+# Claude Code Agent System - .gitignore
+
+# Claude Code local files
+.claude/local-cache/
+.claude/logs/
+*.log
+
+# Node modules (if any tools use npm)
+node_modules/
+package-lock.json
+yarn.lock
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+*.bak
+*.backup
+
+# Build outputs (if applicable)
+dist/
+build/
+*.exe
+*.msi
+
+# Environment files (if used for testing)
+.env
+.env.local
+.env.*.local
+
+# Python (if using build scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+
+# Test artifacts
+coverage/
+.nyc_output/
+test-results/
+
+# Documentation build artifacts
+docs/_build/
+docs/.doctrees/
+
+# macOS
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Windows
+[Dd]esktop.ini
+ehthumbs.db
+ehthumbs_vista.db
+
+# Linux
+.directory
+.Trash-*
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Project-specific
+# (Add any custom patterns here)
+
+# Helper files (delete after first push)
+# GIT-COMMANDS.md
+# TODO-AFTER-PUSH.md
+# push-to-github.ps1

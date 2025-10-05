@@ -1,0 +1,142 @@
+{
+  "$_watermark": "🌟 SenaiVerse - Claude Code Agent System v1.0",
+  "$comment": "Claude Code settings.json - Copy to ~/.claude/settings.json or .claude/settings.json in your project",
+  "$documentation": "https://docs.claude.com/en/docs/claude-code/settings",
+
+  "permissions": {
+    "$comment": "Tool permissions - allow/deny specific tools or file access",
+    "allow": [
+      "Read",
+      "Grep",
+      "Glob",
+      "Bash(npm:*)",
+      "Bash(git:*)",
+      "Bash(ls:*)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.local)",
+      "Read(*.key)",
+      "Read(*.pem)"
+    ]
+  },
+
+  "env": {
+    "$comment": "Environment variables available to Claude Code",
+    "NODE_ENV": "development",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1"
+  },
+
+  "hooks": {
+    "$comment": "HOOKS ARE DISABLED BY DEFAULT - Remove 'disabled: true' to enable",
+    "$documentation": "See CUSTOMIZATION-GUIDE.md for detailed hook configuration",
+
+    "PreToolUse": [
+      {
+        "name": "Accessibility Pre-Check",
+        "disabled": true,
+        "matcher": "Write",
+        "filter": "*.tsx",
+        "command": "node ~/.claude/hooks/validate-a11y.js {{file_path}}",
+        "blocking": true,
+        "timeout": 5000
+      },
+      {
+        "name": "Design Token Validation",
+        "disabled": true,
+        "matcher": "Write|Edit",
+        "filter": "*.tsx",
+        "command": "node ~/.claude/hooks/check-design-tokens.js {{file_path}}",
+        "blocking": true,
+        "timeout": 3000
+      }
+    ],
+
+    "PostToolUse": [
+      {
+        "name": "Bundle Size Check",
+        "disabled": true,
+        "matcher": "Write",
+        "filter": "*.{ts,tsx,js,jsx}",
+        "command": "node ~/.claude/hooks/check-bundle-size.js",
+        "blocking": false,
+        "timeout": 10000
+      },
+      {
+        "name": "Security Scan",
+        "disabled": true,
+        "matcher": "Write|Edit",
+        "filter": "*{auth,payment,api,secure}*.{ts,tsx}",
+        "command": "node ~/.claude/hooks/security-scan.js {{file_path}}",
+        "blocking": true,
+        "timeout": 8000
+      }
+    ],
+
+    "PostConversation": [
+      {
+        "name": "Test Coverage Report",
+        "disabled": true,
+        "command": "npm run test:coverage -- --silent",
+        "blocking": false,
+        "timeout": 30000
+      }
+    ]
+  },
+
+  "model": {
+    "$comment": "Default model selection - haiku (fast), sonnet (balanced), opus (smartest)",
+    "default": "claude-sonnet-4.5"
+  },
+
+  "statusLine": {
+    "$comment": "Custom status line display - see docs for available variables",
+    "enabled": true,
+    "template": "{{model}} | {{tokens}} tokens | {{cost}}"
+  },
+
+  "outputStyle": {
+    "$comment": "Customize Claude Code output style",
+    "verbosity": "normal",
+    "codeBlocks": true,
+    "markdown": true,
+    "colors": true
+  },
+
+  "expo": {
+    "$comment": "Expo/React Native specific settings (custom field)",
+    "sdk": "53.0.0",
+    "platforms": ["ios", "android"],
+    "enforceDesignSystem": true,
+    "enforceAccessibility": true,
+    "performanceBudget": {
+      "bundleSize": 25000000,
+      "jsHeapSize": 500000000,
+      "targetFps": 60
+    }
+  },
+
+  "development": {
+    "$comment": "Development preferences (custom field)",
+    "linting": {
+      "autoFix": false,
+      "rules": "strict"
+    },
+    "testing": {
+      "autoGenerateTests": false,
+      "coverageThreshold": 75,
+      "prioritizeByRoi": true
+    }
+  },
+
+  "customization": {
+    "$comment": "Project-specific customization (custom field)",
+    "organizationName": "Your Company",
+    "projectName": "Your Expo App",
+    "conventions": {
+      "fileNaming": "kebab-case",
+      "componentNaming": "PascalCase",
+      "hookNaming": "camelCase with 'use' prefix"
+    }
+  }
+}

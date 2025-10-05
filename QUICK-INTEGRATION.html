@@ -1,0 +1,330 @@
+<!--
+    ============================================================================
+    QUICK INTEGRATION SNIPPET
+    ============================================================================
+    Copy this entire code block and paste it RIGHT BEFORE the closing </body> tag
+    in your claude-code-system-complete.html file
+
+    This replaces the existing <script> section (lines 2250-2352)
+    ============================================================================
+-->
+
+<script>
+// ============================================================================
+// CLAUDE CODE DOCUMENTATION - ADVANCED INTERACTIVITY SYSTEM v1.0.0
+// ============================================================================
+// 11 Elite Features: Search, Keyboard Nav, Animations, Syntax Highlighting,
+// Progress Bar, Count-up Stats, Scroll Effects, Parallax, Reading Time,
+// Accessibility Enhancements, Table of Contents
+// ============================================================================
+
+// UTILITIES
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
+}
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const easing = {
+    easeOutExpo: t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t)
+};
+
+// READING PROGRESS BAR
+function createProgressBar() {
+    const bar = document.createElement('div');
+    bar.style.cssText = 'position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--secondary));width:0%;z-index:9999;transition:width 0.1s';
+    document.body.appendChild(bar);
+    window.addEventListener('scroll', debounce(() => {
+        const progress = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        bar.style.width = Math.min(progress, 100) + '%';
+    }, 10));
+}
+
+// ADVANCED SEARCH WITH KEYBOARD NAV
+function createAdvancedSearch() {
+    const agentsSection = document.getElementById('agents');
+    if (!agentsSection) return;
+
+    const container = document.createElement('div');
+    container.className = 'search-box';
+    container.style.marginTop = '2rem';
+    container.innerHTML = `
+        <span class="search-icon">🔍</span>
+        <input type="text" id="agent-search" class="search-input" placeholder="Search agents... (↑↓ Enter Esc)" autocomplete="off">
+        <div id="search-results" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--bg-secondary);border:1px solid var(--border-primary);border-radius:0.5rem;margin-top:0.5rem;max-height:400px;overflow-y:auto;z-index:100;"></div>
+    `;
+    agentsSection.querySelector('h2').insertAdjacentElement('afterend', container);
+
+    const input = document.getElementById('agent-search');
+    const results = document.getElementById('search-results');
+    const cards = document.querySelectorAll('.agent-card');
+    let selectedIndex = -1;
+    let items = [];
+
+    cards.forEach(card => {
+        const text = `${card.querySelector('h3').textContent} ${card.querySelector('p').textContent} ${Array.from(card.querySelectorAll('.tag')).map(t => t.textContent).join(' ')}`.toLowerCase();
+        items.push({ element: card, text });
+    });
+
+    input.addEventListener('input', debounce((e) => {
+        const query = e.target.value.toLowerCase();
+        if (!query) {
+            results.style.display = 'none';
+            cards.forEach(c => c.style.display = '');
+            return;
+        }
+        const matches = items.filter(i => i.text.includes(query));
+        cards.forEach(c => c.style.display = 'none');
+        matches.forEach(m => m.element.style.display = '');
+        results.innerHTML = matches.map((m, i) => `
+            <div data-index="${i}" style="padding:1rem;cursor:pointer;border-bottom:1px solid var(--border-primary)"
+                 onmouseover="this.style.background='var(--bg-tertiary)'" onmouseout="this.style.background='transparent'">
+                <div style="font-weight:600;color:var(--primary)">${m.element.querySelector('h3').textContent}</div>
+            </div>
+        `).join('');
+        results.style.display = 'block';
+    }, 300));
+
+    input.addEventListener('keydown', (e) => {
+        const resultItems = results.querySelectorAll('[data-index]');
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            selectedIndex = Math.min(selectedIndex + 1, resultItems.length - 1);
+            resultItems.forEach((el, i) => el.style.background = i === selectedIndex ? 'var(--bg-tertiary)' : 'transparent');
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            selectedIndex = Math.max(selectedIndex - 1, -1);
+            resultItems.forEach((el, i) => el.style.background = i === selectedIndex ? 'var(--bg-tertiary)' : 'transparent');
+        } else if (e.key === 'Enter' && selectedIndex >= 0) {
+            const match = items.filter(i => i.text.includes(input.value.toLowerCase()))[selectedIndex];
+            if (match) {
+                match.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                match.element.querySelector('details')?.setAttribute('open', '');
+                results.style.display = 'none';
+            }
+        } else if (e.key === 'Escape') {
+            results.style.display = 'none';
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!container.contains(e.target)) results.style.display = 'none';
+    });
+}
+
+// EXPANDABLE CARDS
+function initExpandableCards() {
+    let currentOpen = null;
+    document.querySelectorAll('.agent-card details').forEach(details => {
+        const icon = document.createElement('span');
+        icon.textContent = ' ▼';
+        icon.style.cssText = 'display:inline-block;transition:transform 0.3s;font-size:0.75rem;margin-left:0.5rem';
+        details.querySelector('summary').appendChild(icon);
+
+        details.addEventListener('toggle', () => {
+            if (details.open) {
+                if (currentOpen && currentOpen !== details) currentOpen.removeAttribute('open');
+                currentOpen = details;
+                icon.style.transform = 'rotate(180deg)';
+                setTimeout(() => details.parentElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+        });
+    });
+}
+
+// SYNTAX HIGHLIGHTING
+function initSyntaxHighlight() {
+    document.querySelectorAll('pre code').forEach(block => {
+        const code = block.textContent;
+        block.innerHTML = code
+            .replace(/(#.*$)/gm, '<span style="color:#6A9955">$1</span>')
+            .replace(/(['"])(.+?)\1/g, '<span style="color:#CE9178">$1$2$1</span>')
+            .replace(/\b(cd|ls|npm|git|function|if|else)\b/g, '<span style="color:#569CD6">$1</span>')
+            .replace(/\$\w+/g, '<span style="color:#9CDCFE">$&</span>')
+            .replace(/--?\w+/g, '<span style="color:#C586C0">$&</span>');
+
+        const badge = document.createElement('div');
+        badge.textContent = code.includes('npm') ? 'BASH' : code.includes('import') ? 'JS' : 'CODE';
+        badge.style.cssText = 'position:absolute;top:0.5rem;left:0.5rem;background:var(--bg-tertiary);color:var(--text-tertiary);padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.75rem;font-weight:600';
+        block.parentElement.appendChild(badge);
+    });
+}
+
+// ANIMATED STATISTICS
+function animateStats() {
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.dataset.animated && !prefersReducedMotion) {
+                entry.target.dataset.animated = 'true';
+                const text = entry.target.textContent;
+                const target = parseInt(text.replace(/[^\d]/g, ''));
+                const startTime = performance.now();
+
+                function update(now) {
+                    const progress = Math.min((now - startTime) / 2000, 1);
+                    const value = Math.floor(easing.easeOutExpo(progress) * target);
+                    entry.target.textContent = text.includes('%') ? value + '%' : value;
+                    if (progress < 1) requestAnimationFrame(update);
+                    else entry.target.textContent = text;
+                }
+                requestAnimationFrame(update);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-value').forEach(stat => observer.observe(stat));
+}
+
+// SCROLL ANIMATIONS
+function initScrollAnimations() {
+    if (prefersReducedMotion) return;
+
+    const style = document.createElement('style');
+    style.textContent = '@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}.animate-on-scroll{opacity:0}.animate-on-scroll.visible{animation:fadeInUp 0.6s ease-out forwards}';
+    document.head.appendChild(style);
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => entry.target.classList.add('visible'), i * 100);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.card, .agent-card').forEach(card => {
+        card.classList.add('animate-on-scroll');
+        observer.observe(card);
+    });
+}
+
+// PARALLAX HERO
+function initParallax() {
+    if (prefersReducedMotion) return;
+    const hero = document.getElementById('hero');
+    if (!hero) return;
+
+    window.addEventListener('scroll', debounce(() => {
+        const scrolled = window.scrollY;
+        requestAnimationFrame(() => {
+            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            hero.style.opacity = 1 - (scrolled / 600);
+        });
+    }, 10));
+}
+
+// READING TIME
+function addReadingTime() {
+    document.querySelectorAll('.section').forEach(section => {
+        const wordCount = section.textContent.trim().split(/\s+/).length;
+        const minutes = Math.ceil(wordCount / 200);
+        const heading = section.querySelector('h2');
+
+        if (heading && minutes > 1) {
+            const badge = document.createElement('span');
+            badge.textContent = `${minutes} min read`;
+            badge.style.cssText = 'display:inline-block;margin-left:1rem;padding:0.25rem 0.75rem;background:var(--bg-tertiary);color:var(--text-tertiary);border-radius:9999px;font-size:0.875rem;font-weight:500';
+            heading.appendChild(badge);
+        }
+    });
+}
+
+// ACCESSIBILITY
+function enhanceA11y() {
+    const style = document.createElement('style');
+    style.textContent = '*:focus-visible{outline:2px solid var(--primary);outline-offset:2px}.skip-to-main{position:absolute;top:-40px;left:0;background:var(--primary);color:var(--bg-primary);padding:0.5rem 1rem;z-index:10000}.skip-to-main:focus{top:0}';
+    document.head.appendChild(style);
+
+    const skip = document.createElement('a');
+    skip.href = '#hero';
+    skip.className = 'skip-to-main';
+    skip.textContent = 'Skip to main content';
+    document.body.insertBefore(skip, document.body.firstChild);
+}
+
+// NAVIGATION
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+function updateActiveLink() {
+    const scrollPos = window.scrollY + 100;
+    sections.forEach(section => {
+        const top = section.offsetTop;
+        const height = section.offsetHeight;
+        const id = section.getAttribute('id');
+        if (scrollPos >= top && scrollPos < top + height) {
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+            });
+        }
+    });
+}
+
+window.addEventListener('scroll', updateActiveLink);
+
+// MOBILE NAV
+const navToggle = document.querySelector('.nav-toggle');
+const navLinksContainer = document.querySelector('.nav-links');
+
+if (navToggle) {
+    navToggle.addEventListener('click', () => navLinksContainer.classList.toggle('active'));
+    navLinks.forEach(link => link.addEventListener('click', () => navLinksContainer.classList.remove('active')));
+}
+
+// SEARCH (FAQ/TROUBLESHOOTING)
+['troubleshooting', 'faq'].forEach(id => {
+    const input = document.getElementById(`${id}-search`);
+    const list = document.getElementById(`${id}-list`);
+    if (input) {
+        input.addEventListener('input', debounce(e => {
+            const query = e.target.value.toLowerCase();
+            list.querySelectorAll('details').forEach(detail => {
+                const match = detail.textContent.toLowerCase().includes(query);
+                detail.style.display = match ? 'block' : 'none';
+                if (match && query.length > 2) detail.setAttribute('open', '');
+            });
+        }, 300));
+    }
+});
+
+// COPY CODE
+document.querySelectorAll('pre').forEach(pre => {
+    const btn = document.createElement('button');
+    btn.className = 'copy-button';
+    btn.textContent = 'Copy';
+    btn.onclick = () => {
+        navigator.clipboard.writeText(pre.querySelector('code').textContent).then(() => {
+            btn.textContent = 'Copied!';
+            btn.style.background = 'var(--success)';
+            setTimeout(() => {
+                btn.textContent = 'Copy';
+                btn.style.background = '';
+            }, 2000);
+        });
+    };
+    pre.style.position = 'relative';
+    pre.appendChild(btn);
+});
+
+// INITIALIZE
+document.addEventListener('DOMContentLoaded', () => {
+    updateActiveLink();
+    createProgressBar();
+    createAdvancedSearch();
+    initExpandableCards();
+    initSyntaxHighlight();
+    animateStats();
+    initScrollAnimations();
+    initParallax();
+    addReadingTime();
+    enhanceA11y();
+
+    console.log('%c🌟 Claude Code Documentation Enhanced!', 'color:#3DD6C7;font-size:16px;font-weight:bold');
+    console.log('%c✓ Advanced Search  ✓ Keyboard Nav  ✓ Animations  ✓ Syntax Highlighting  ✓ Progress Bar', 'color:#34D399;font-size:11px');
+});
+</script>

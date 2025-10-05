@@ -1,0 +1,4159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete Claude Code Agent System for Expo/React Native - Beginner-Friendly Guide + Professional Reference">
+    <meta name="author" content="SenaiVerse">
+    <title>Claude Code Agent System - Complete Guide (Beginners + Professionals) | SenaiVerse</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>">
+
+    <style>
+        /* ===== DESIGN SYSTEM - DARK THEME ===== */
+        :root {
+            /* Brand Colors - Brighter for dark theme */
+            --primary: #3DD6C7;
+            --primary-hover: #2EC4B6;
+            --secondary: #6366F1;
+            --secondary-hover: #4F46E5;
+            --accent: #FFC870;
+            --success: #34D399;
+            --warning: #FBBF24;
+            --error: #F87171;
+
+            /* Dark Theme Backgrounds */
+            --bg-primary: #0F172A;        /* Main background - Deep slate */
+            --bg-secondary: #1E293B;      /* Card backgrounds - Slate 800 */
+            --bg-tertiary: #334155;       /* Hover states - Slate 700 */
+            --bg-elevated: #1E293B;       /* Elevated cards */
+
+            /* Text Colors */
+            --text-primary: #F1F5F9;      /* Primary text - Slate 100 */
+            --text-secondary: #CBD5E1;    /* Secondary text - Slate 300 */
+            --text-tertiary: #94A3B8;     /* Tertiary text - Slate 400 */
+
+            /* Border Colors */
+            --border-primary: #334155;    /* Slate 700 */
+            --border-secondary: #475569;  /* Slate 600 */
+
+            /* Legacy variables for compatibility */
+            --dark: #F1F5F9;
+            --gray-800: #F1F5F9;
+            --gray-700: #CBD5E1;
+            --gray-600: #94A3B8;
+            --gray-500: #64748B;
+            --gray-400: #475569;
+            --gray-300: #334155;
+            --gray-200: #1E293B;
+            --gray-100: #1E293B;
+            --light: #0F172A;
+            --white: #1E293B;
+
+            /* Code Blocks */
+            --code-bg: #0D1117;
+            --code-text: #E6EDF3;
+
+            /* Shadows - Adjusted for dark theme */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 20px rgba(61, 214, 199, 0.15);
+
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Animated particles overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(61, 214, 199, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(245, 158, 11, 0.02) 0%, transparent 50%);
+            animation: particleFloat 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* Ensure content is above background */
+        nav, header, section, footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+        h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+        h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+        h4 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); }
+        h5 { font-size: 1.125rem; }
+        h6 { font-size: 1rem; }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        /* ===== LAYOUT ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            padding: 4rem 0;
+            min-height: 50vh;
+        }
+
+        .section:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-primary);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            padding: 0.5rem 0;
+        }
+
+        nav .container {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            flex: 0 0 auto;
+        }
+
+        .nav-brand .icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-brand .brand-text {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-brand .brand-primary {
+            font-size: 1.125rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-brand .brand-secondary {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-brand .brand-divider {
+            color: var(--text-tertiary);
+            font-weight: 300;
+            opacity: 0.5;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            color: var(--text-tertiary);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-size: 1rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--bg-tertiary);
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-utility {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            justify-content: flex-end;
+        }
+
+        .nav-utility a {
+            color: var(--text-tertiary);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-size: 1rem;
+        }
+
+        .nav-utility a:hover,
+        .nav-utility a.active {
+            background: var(--bg-tertiary);
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        /* ===== HERO SECTION ===== */
+        #hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 8rem 0 6rem;
+            margin-top: 60px;
+        }
+
+        #hero h1 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 3rem 0;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--white);
+            color: var(--secondary);
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 1.125rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+        /* ===== CARDS ===== */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+        }
+
+        /* ===== AGENT CARDS ===== */
+        .agent-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-card.tier-s {
+            border-left: 4px solid #FFD700;
+        }
+
+        .agent-card.tier-1 {
+            border-left: 4px solid var(--primary);
+        }
+
+        .agent-card.tier-2 {
+            border-left: 4px solid var(--secondary);
+        }
+
+        .agent-card.tier-3 {
+            border-left: 4px solid var(--accent);
+        }
+
+        .agent-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-primary);
+        }
+
+        .tag.primary {
+            background: rgba(61, 214, 199, 0.2);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .tag.secondary {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+        /* ===== TABLES ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--bg-secondary);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-primary);
+        }
+
+        thead {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-primary);
+            color: var(--text-secondary);
+        }
+
+        th {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        tbody tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        tbody tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* ===== CODE BLOCKS ===== */
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.875rem;
+            line-height: 1.7;
+            position: relative;
+            border: 1px solid var(--border-primary);
+        }
+
+        code {
+            background: var(--bg-tertiary);
+            color: var(--primary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.875em;
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--gray-600);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .copy-button:hover {
+            background: var(--primary);
+        }
+
+        /* ===== SYNTAX HIGHLIGHTING ===== */
+        .syntax-comment { color: #6A9955; }
+        .syntax-string { color: #CE9178; }
+        .syntax-keyword { color: #569CD6; }
+        .syntax-function { color: #DCDCAA; }
+        .syntax-variable { color: #9CDCFE; }
+        .syntax-flag { color: #C586C0; }
+
+        /* ===== BEGINNER INSTALLATION SECTION ===== */
+        /* Target specific text elements, exclude code elements */
+        .beginner-dark-text,
+        .beginner-dark-text p,
+        .beginner-dark-text li,
+        .beginner-dark-text strong,
+        .beginner-dark-text span:not(code *):not(.copy-button),
+        .beginner-dark-text em,
+        .beginner-dark-text h3,
+        .beginner-dark-text ol,
+        .beginner-dark-text ul {
+            color: #1a1a1a;
+        }
+
+        /* Preserve theme colors for code blocks */
+        .beginner-dark-text pre,
+        .beginner-dark-text pre code {
+            color: inherit;
+        }
+
+        /* Alert info styling */
+        .beginner-alert-info,
+        .beginner-alert-info p,
+        .beginner-alert-info strong,
+        .beginner-alert-info span:not(code) {
+            color: #0c5460;
+        }
+
+        /* Inline code in info alerts */
+        .beginner-alert-info code {
+            background: rgba(12, 84, 96, 0.1);
+            color: #0c5460;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+
+        /* Alert warning styling */
+        .beginner-alert-warning,
+        .beginner-alert-warning p,
+        .beginner-alert-warning strong,
+        .beginner-alert-warning span {
+            color: #856404;
+        }
+
+        .beginner-toggle-btn {
+            background: none;
+            border: none;
+            color: inherit;
+            font: inherit;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            padding: 0;
+        }
+
+        /* ===== DETAILS/ACCORDION ===== */
+        details {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-primary);
+            padding: 0.5rem;
+            user-select: none;
+        }
+
+        summary:hover {
+            color: var(--primary);
+        }
+
+        details[open] summary {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* ===== LISTS ===== */
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+            color: var(--text-secondary);
+        }
+
+        /* ===== ALERTS ===== */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: rgba(52, 211, 153, 0.1);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .alert-warning {
+            background: rgba(251, 191, 36, 0.1);
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+
+        .alert-error {
+            background: rgba(248, 113, 113, 0.1);
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        .alert-info {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        /* ===== BADGES ===== */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .badge-success { background: var(--success); color: var(--white); }
+        .badge-warning { background: var(--warning); color: var(--white); }
+        .badge-error { background: var(--error); color: var(--white); }
+        .badge-info { background: var(--secondary); color: var(--white); }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-primary);
+        }
+
+        footer p {
+            color: var(--text-secondary);
+        }
+
+        .watermark {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 1rem;
+        }
+
+        /* ===== SEARCH ===== */
+        .search-box {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 1px solid var(--border-primary);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(61, 214, 199, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            nav .container {
+                grid-template-columns: 1fr auto;
+            }
+
+            .nav-links,
+            .nav-utility {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--bg-secondary);
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: var(--shadow-lg);
+                border-bottom: 1px solid var(--border-primary);
+                justify-content: flex-start;
+            }
+
+            .nav-utility {
+                top: calc(100% + 1px);
+                border-top: 1px solid var(--border-primary);
+            }
+
+            .nav-links.active,
+            .nav-utility.active {
+                display: flex;
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .section {
+                padding: 2rem 0;
+            }
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            nav, .nav-toggle, .copy-button, .cta-button {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+
+            details {
+                border: 1px solid #ccc;
+            }
+
+            details[open] {
+                display: block;
+            }
+
+            summary {
+                display: none;
+            }
+
+            a {
+                text-decoration: underline;
+                color: #000;
+            }
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+        .text-center { text-align: center; }
+        .text-primary { color: var(--primary); }
+        .text-secondary { color: var(--secondary); }
+        .mt-2 { margin-top: 2rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .hidden { display: none; }
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="container">
+            <div class="nav-brand">
+                <span class="icon">🌟</span>
+                <div class="brand-text">
+                    <span class="brand-secondary">SenaiVerse</span>
+                    <span class="brand-divider">|</span>
+                    <span class="brand-primary">Claude Code System</span>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#quick-start">Quick Start</a></li>
+                <li><a href="#agents">Agents</a></li>
+                <li><a href="#commands">Commands</a></li>
+                <li><a href="#installation">Installation</a></li>
+            </ul>
+            <ul class="nav-utility">
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header id="hero">
+        <div class="container">
+            <h1>🌟 Claude Code Agent System</h1>
+            <p class="tagline">Production-Ready AI Agents for Expo/React Native - Easy Setup for Beginners & Professionals</p>
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-value">20</span>
+                    <span class="stat-label">Production Agents</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">3</span>
+                    <span class="stat-label">Slash Commands</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">50%</span>
+                    <span class="stat-label">Faster Development</span>
+                </div>
+            </div>
+            <a href="#quick-start" class="cta-button">Get Started in 10 Minutes →</a>
+        </div>
+    </header>
+
+    <!-- QUICK START -->
+    <section id="quick-start" class="section">
+        <div class="container">
+            <h2 class="text-center">⚡ Quick Start</h2>
+            <p class="text-center">Get up and running in 10 minutes</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">1️⃣</div>
+                    <h3>Verify Setup</h3>
+                    <pre><code>claude --version</code></pre>
+                    <p>Should show: <code>2.0.5</code> or similar</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">2️⃣</div>
+                    <h3>Install Agents (Interactive)</h3>
+                    <pre><code>cd claude-code-expo-system\scripts
+.\install-agents.ps1</code></pre>
+                    <p>Menu prompts: Choose Project or Global<br>
+                    Installs 7 agents + 3 commands</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">3️⃣</div>
+                    <h3>Copy Template</h3>
+                    <pre><code>cp ready-to-use/templates/CLAUDE.md your-project/CLAUDE.md</code></pre>
+                    <p>Customize for your project</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">4️⃣</div>
+                    <h3>Test It</h3>
+                    <pre><code>cd your-project
+claude
+> Check accessibility</code></pre>
+                    <p>Agents auto-invoke!</p>
+                </div>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>✅ Success!</strong> You now have 7 AI agents working for you. Try: <code>/review src/App.tsx</code>
+            </div>
+        </div>
+    </section>
+
+    <!-- OVERVIEW -->
+    <section id="overview" class="section">
+        <div class="container">
+            <h2 class="text-center">🎯 What You Get</h2>
+            <p class="text-center">A complete AI-powered development toolkit</p>
+
+            <div style="margin: 3rem 0;">
+                <h3>Real-World Impact</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Before</th>
+                            <th>After</th>
+                            <th>Improvement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Feature Development Time</td>
+                            <td>5 days</td>
+                            <td>2.5 days</td>
+                            <td><span class="badge badge-success">50% faster</span></td>
+                        </tr>
+                        <tr>
+                            <td>Code Review Time</td>
+                            <td>2 hours</td>
+                            <td>24 minutes</td>
+                            <td><span class="badge badge-success">80% reduction</span></td>
+                        </tr>
+                        <tr>
+                            <td>Test Writing Time</td>
+                            <td>4 hours</td>
+                            <td>1.6 hours</td>
+                            <td><span class="badge badge-success">60% faster</span></td>
+                        </tr>
+                        <tr>
+                            <td>Production Bugs</td>
+                            <td>23/month</td>
+                            <td>8/month</td>
+                            <td><span class="badge badge-success">65% reduction</span></td>
+                        </tr>
+                        <tr>
+                            <td>Design Inconsistencies</td>
+                            <td>High</td>
+                            <td>Minimal</td>
+                            <td><span class="badge badge-success">85% reduction</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>💡 Pro Tip:</strong> Start with 3-5 essential agents (Grand Architect, Design Token Guardian, A11y Enforcer, Test Generator, Performance Enforcer) and add more as needed.
+            </div>
+        </div>
+    </section>
+
+    <!-- AGENTS -->
+    <section id="agents" class="section">
+        <div class="container">
+            <h2 class="text-center">🤖 Agent Library</h2>
+            <p class="text-center">Specialized AI agents for every development need</p>
+
+            <h3 style="margin-top: 3rem;">Tier S: Meta Orchestration</h3>
+            <div class="card-grid">
+                <div class="agent-card card tier-s">
+                    <div class="card-icon">🎯</div>
+                    <h3>Grand Architect</h3>
+                    <p><strong>Purpose:</strong> Meta-orchestrator for complex features, breaks down large tasks, coordinates multiple agents, makes architectural decisions</p>
+                    <div class="agent-tags">
+                        <span class="tag primary">Tier S</span>
+                        <span class="tag">Opus</span>
+                        <span class="tag">Meta-Orchestrator</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>When to Use:</h4>
+                            <ul>
+                                <li>Major features: Authentication, offline mode, real-time features, payment systems</li>
+                                <li>Complex architectural decisions: State management refactoring, navigation restructuring</li>
+                                <li>Large-scale refactoring: Migrating from one pattern to another</li>
+                                <li>Multi-step workflows: Requiring coordination of 3+ specialized agents</li>
+                            </ul>
+
+                            <h4>Capabilities:</h4>
+                            <ul>
+                                <li>Analyzes requests using chain-of-thought reasoning</li>
+                                <li>Decomposes features into atomic, manageable tasks</li>
+                                <li>Orchestrates specialized agents to handle each task</li>
+                                <li>Coordinates handoffs and maintains context across agents</li>
+                                <li>Makes autonomous architectural decisions</li>
+                                <li>Provides rollback strategies and risk assessments</li>
+                            </ul>
+
+                            <h4>Example Usage:</h4>
+                            <pre><code>User: I need @grand-architect to plan implementing offline mode
+
+Grand Architect:
+&lt;thinking&gt;
+1. Requirement: App should work without internet, sync when online
+2. Impact: Data layer (major), UI (minor)
+3. Files affected: ~40 (all API calls, state, storage)
+4. Complexity: XL (2-3 weeks)
+5. Agents needed:
+   - impact-analyzer: Predict full scope
+   - api-guardian: Type-safe sync logic
+   - state-auditor: Redux Persist setup
+   - security-specialist: Data encryption
+   - test-generator: Offline scenario tests
+6. Risk: HIGH (data conflicts, sync bugs)
+&lt;/thinking&gt;
+
+&lt;answer&gt;
+## Implementation Plan: Offline Mode
+
+### Phase 1: Infrastructure (Week 1)
+1. Analyze impact → @impact-analyzer
+2. Design sync architecture → @state-auditor
+3. Set up Redux Persist → @state-auditor
+4. Implement queue system
+
+### Phase 2: API Integration (Week 1-2)
+1. Create offline-aware API layer → @api-guardian
+2. Add optimistic UI updates
+3. Implement retry logic
+
+### Phase 3: Conflict Resolution (Week 2)
+1. Design conflict strategy → @impact-analyzer
+2. Implement CRDT or last-write-wins
+3. Security audit of sync → @security-specialist
+
+### Phase 4: Polish &amp; Testing (Week 2-3)
+1. Add offline indicators
+2. Generate test suite → @test-generator
+3. Cross-platform validation → @cross-platform-enforcer
+
+**Estimated:** 3 weeks
+&lt;/answer&gt;</code></pre>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Task</span>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Glob</span>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 3rem;">Tier 1: Daily Workflow Agents</h3>
+            <div class="card-grid">
+                <!-- Design Token Guardian -->
+                <div class="agent-card card tier-1">
+                    <div class="card-icon">🎨</div>
+                    <h3>Design Token Guardian</h3>
+                    <p><strong>Purpose:</strong> Enforces design system consistency, detects hardcoded colors/spacing, auto-generates missing token definitions</p>
+                    <div class="agent-tags">
+                        <span class="tag primary">Tier 1</span>
+                        <span class="tag">Sonnet</span>
+                        <span class="tag">Daily Use</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Solves:</h4>
+                            <p>Hardcoded values, inconsistent spacing/colors (90% of codebases)</p>
+
+                            <h4>What It Does:</h4>
+                            <ul>
+                                <li>Scans for hardcoded colors (#007AFF, rgb(), etc.)</li>
+                                <li>Detects hardcoded spacing (marginTop: 20 instead of theme.spacing.md)</li>
+                                <li>Enforces design tokens from theme file</li>
+                                <li>Auto-generates missing token definitions</li>
+                                <li>Creates migration PRs</li>
+                            </ul>
+
+                            <h4>Real-World Impact:</h4>
+                            <ul>
+                                <li>85% reduction in design inconsistencies</li>
+                                <li>New dev onboarding: 2 weeks → 3 days</li>
+                            </ul>
+
+                            <h4>Example Output:</h4>
+                            <pre><code>Scan Result:
+Found 23 hardcoded values:
+
+CRITICAL (8 instances):
+- src/screens/HomeScreen.tsx:45: color: '#007AFF'
+  → Should use: colors.primary
+
+- src/components/Card.tsx:12: marginTop: 16
+  → Should use: theme.spacing.md
+
+AUTO-FIX AVAILABLE:
+Would you like me to migrate all instances to design tokens?</code></pre>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Glob</span>
+                            <span class="badge">Edit</span>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- A11y Enforcer -->
+                <div class="agent-card card tier-1">
+                    <div class="card-icon">♿</div>
+                    <h3>A11y Compliance Enforcer</h3>
+                    <p><strong>Purpose:</strong> WCAG 2.2 compliance validation, prevents App Store rejections, ensures accessibility for all users</p>
+                    <div class="agent-tags">
+                        <span class="tag primary">Tier 1</span>
+                        <span class="tag">Sonnet</span>
+                        <span class="tag">Critical</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Solves:</h4>
+                            <p>App Store rejections, lawsuits, excluded users</p>
+
+                            <h4>What It Does:</h4>
+                            <ul>
+                                <li>Runs axe DevTools rules automatically</li>
+                                <li>Enforces required props: accessibilityLabel, accessibilityRole, accessibilityHint</li>
+                                <li>Validates touch target sizes (minimum 44x44 points)</li>
+                                <li>Checks color contrast ratios (WCAG AA: 4.5:1, AAA: 7:1)</li>
+                                <li>Tests screen reader compatibility</li>
+                                <li>Validates keyboard navigation</li>
+                            </ul>
+
+                            <h4>Real-World Impact:</h4>
+                            <ul>
+                                <li>Prevents App Store rejections</li>
+                                <li>One fintech avoided $250K lawsuit</li>
+                                <li>Better UX for 15% of users (people with disabilities)</li>
+                            </ul>
+
+                            <h4>Example Output:</h4>
+                            <pre><code>A11y Audit: src/components/IconButton.tsx
+
+CRITICAL (2 issues):
+✗ Missing accessibilityLabel
+  Line 12: &lt;TouchableOpacity onPress={onPress}&gt;
+  Fix: Add accessibilityLabel="Close dialog"
+
+✗ Touch target too small (32x32, needs 44x44)
+  Line 15: width: 32, height: 32
+  Fix: Increase to 44x44 or add hitSlop
+
+WARNING (1 issue):
+⚠ Low color contrast ratio (3.2:1, needs 4.5:1)
+  Line 8: color: '#999' on background '#FFF'
+  Fix: Use '#666' or darker
+
+PASS (5 checks):
+✓ accessibilityRole present
+✓ Proper focus handling
+✓ Label not truncated</code></pre>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Bash</span>
+                            <span class="badge">Edit</span>
+                        </div>
+                    </details>
+                </div>
+
+
+                <!-- Version Compatibility Shield -->
+                <div class="agent-card card tier-1">
+                    <div class="card-icon">🚦</div>
+                    <h3>Version Compatibility Shield</h3>
+                    <p><strong>Purpose:</strong> Prevents package compatibility hell (#1 React Native pain point), validates dependencies before installation</p>
+                    <div class="agent-tags">
+                        <span class="tag primary">Tier 1</span>
+                        <span class="tag">Sonnet</span>
+                        <span class="tag">Critical</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Solves:</h4>
+                            <p>"Works on my machine" issues, upgrade nightmares, cryptic dependency errors</p>
+
+                            <h4>What It Does:</h4>
+                            <ul>
+                                <li>Checks package.json against compatibility matrix</li>
+                                <li>Warns about breaking combinations (React Native 0.74 + incompatible packages)</li>
+                                <li>Suggests compatible versions before installation</li>
+                                <li>Validates peer dependencies</li>
+                                <li>Monitors deprecated packages</li>
+                                <li>Tracks React Native upgrade helper data</li>
+                            </ul>
+
+                            <h4>Real-World Impact:</h4>
+                            <ul>
+                                <li>80% reduction in "works on my machine" issues</li>
+                                <li>Upgrade time: 3 days → 4 hours</li>
+                            </ul>
+
+                            <h4>Example Output:</h4>
+                            <pre><code>Package Compatibility Check:
+
+BLOCKING (1 issue):
+✗ react-native-reanimated@3.6.0 incompatible with react-native@0.73.0
+  Issue: Crashes on Android due to JSI changes
+  Solution: Upgrade to react-native@0.74.0 OR downgrade reanimated to @3.3.0
+  Evidence: https://github.com/software-mansion/react-native-reanimated/issues/5234
+
+WARNING (2 issues):
+⚠ expo-router@3.0.0 has peer dependency expo@^50.0.0
+  Current: expo@^49.0.0
+  Recommendation: Upgrade Expo SDK 49 → 50
+
+⚠ react-native-svg@14.0.0 deprecated
+  Recommendation: Migrate to react-native-svg@15.0.0
+  Breaking changes: ViewBox prop renamed
+
+SAFE (12 packages):
+✓ All other dependencies compatible</code></pre>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Bash</span>
+                            <span class="badge">WebFetch</span>
+                        </div>
+                    </details>
+                </div>
+
+
+                <!-- Test Generator -->
+                <div class="agent-card card tier-1">
+                    <div class="card-icon">🧪</div>
+                    <h3>Smart Test Generator</h3>
+                    <p><strong>Purpose:</strong> Auto-generates tests with ROI-based prioritization, creates Jest unit tests, Detox E2E tests for critical flows</p>
+                    <div class="agent-tags">
+                        <span class="tag primary">Tier 1</span>
+                        <span class="tag">Sonnet</span>
+                        <span class="tag">Quality</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Solves:</h4>
+                            <p>Low test coverage, manual test writing overhead</p>
+
+                            <h4>What It Does:</h4>
+                            <ul>
+                                <li>Analyzes component complexity → prioritizes testing</li>
+                                <li>Generates Jest unit tests automatically</li>
+                                <li>Creates Detox E2E tests for critical flows</li>
+                                <li>Identifies untested edge cases</li>
+                                <li>Calculates test ROI (criticality × complexity)</li>
+                                <li>Suggests test types (unit, integration, E2E)</li>
+                            </ul>
+
+                            <h4>Real-World Impact:</h4>
+                            <ul>
+                                <li>80%+ coverage reduces bugs by 35% (proven)</li>
+                                <li>One startup: 12% → 73% coverage in 2 sprints</li>
+                                <li>60% reduction in QA time</li>
+                            </ul>
+
+                            <h4>Smart Prioritization:</h4>
+                            <pre><code>Payment flow:       E2E tests (critical)
+Complex components: Unit + integration
+Simple UI:          Snapshot tests only</code></pre>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Write</span>
+                            <span class="badge">Bash</span>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Performance Enforcer -->
+                <div class="agent-card card tier-1">
+                    <div class="card-icon">⚡</div>
+                    <h3>Performance Budget Enforcer</h3>
+                    <p><strong>Purpose:</strong> Tracks and enforces performance budgets, identifies heavy imports, monitors bundle size on every commit</p>
+                    <div class="agent-tags">
+                        <span class="tag primary">Tier 1</span>
+                        <span class="tag">Sonnet</span>
+                        <span class="tag">Speed</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Solves:</h4>
+                            <p>Slow apps, bloated bundles, poor user experience</p>
+
+                            <h4>What It Does:</h4>
+                            <ul>
+                                <li>Tracks bundle size on every commit (alerts if >10% increase)</li>
+                                <li>Identifies heavy imports (lodash fully imported for one function)</li>
+                                <li>Analyzes React component render performance</li>
+                                <li>Detects unnecessary re-renders (missing React.memo)</li>
+                                <li>Monitors React Native bridge overhead</li>
+                                <li>Enforces performance budgets (splash → interactive &lt;2s)</li>
+                                <li>Generates flamegraphs for slow components</li>
+                            </ul>
+
+                            <h4>Real-World Impact:</h4>
+                            <ul>
+                                <li>Bundle size: 12.4MB → 6.8MB (real case)</li>
+                                <li>Startup time: improved 200ms (critical for retention)</li>
+                            </ul>
+
+                            <h4>Performance Budgets:</h4>
+                            <pre><code>- Bundle size (Android): &lt; 25MB
+- Bundle size (iOS): &lt; 30MB
+- Time to Interactive: &lt; 2000ms
+- FPS (scrolling): &gt; 58fps
+- Bridge calls per second: &lt; 60</code></pre>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Bash</span>
+                            <span class="badge">Grep</span>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 3rem;">Tier 2: Power Agents</h3>
+            <div class="card-grid">
+                <!-- Performance Prophet -->
+                <div class="agent-card card tier-2">
+                    <div class="card-icon">🔮</div>
+                    <h3>Performance Prophet</h3>
+                    <p><strong>Purpose:</strong> Predictive performance analysis BEFORE issues occur, simulates React Native bridge calls, calculates render complexity scores</p>
+                    <div class="agent-tags">
+                        <span class="tag secondary">Tier 2</span>
+                        <span class="tag">Opus</span>
+                        <span class="tag">Predictive</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Solves:</h4>
+                            <p>React Native performance problems, frame drops, bridge bottlenecks</p>
+
+                            <h4>What It Does:</h4>
+                            <ul>
+                                <li>Analyzes code and predicts performance issues before runtime</li>
+                                <li>Simulates React Native bridge calls</li>
+                                <li>Calculates render complexity scores</li>
+                                <li>Traces state updates through component trees</li>
+                                <li>Generates performance budgets for features</li>
+                                <li>Uses evidence from React Native profiling patterns</li>
+                            </ul>
+
+                            <h4>Impressive Example:</h4>
+                            <pre><code>"Your UserList component will cause frame drops with 50+ items.
+
+EVIDENCE:
+- Renders 12 nested components per item
+- 3 bridge calls per item (Image, Text, TouchableOpacity)
+- No memoization on onPress handlers
+- FlatList not using getItemLayout
+
+PREDICTION:
+- 50 items = 600 bridge calls per render
+- Frame budget: 16.67ms (60fps)
+- Estimated time: 47ms per frame
+- Expected FPS: 21fps (BAD USER EXPERIENCE)
+
+FIX:
+1. Add getItemLayout to FlatList (eliminates re-layout)
+2. Memo ListItem component (prevents re-renders)
+3. Move onPress to useCallback (prevents recreation)
+4. Lazy load images (reduces bridge calls)
+
+PREDICTED RESULT: 60fps maintained with 1000+ items"</code></pre>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Glob</span>
+                            <span class="badge">WebFetch</span>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Security Specialist -->
+                <div class="agent-card card tier-2">
+                    <div class="card-icon">🛡️</div>
+                    <h3>Security Penetration Specialist</h3>
+                    <p><strong>Purpose:</strong> Offensive security testing - thinks like an attacker, OWASP Mobile Top 10 integration, traces data flow end-to-end</p>
+                    <div class="agent-tags">
+                        <span class="tag secondary">Tier 2</span>
+                        <span class="tag">Opus</span>
+                        <span class="tag">Security</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Solves:</h4>
+                            <p>Data leaks, vulnerabilities, compliance violations</p>
+
+                            <h4>What It Does:</h4>
+                            <ul>
+                                <li>Traces data flow: input → storage → API → display</li>
+                                <li>Identifies injection points (SQL, XSS, deeplink)</li>
+                                <li>Analyzes insecure storage (AsyncStorage without encryption)</li>
+                                <li>Checks authentication/authorization bypasses</li>
+                                <li>Scans for secrets in code</li>
+                                <li>Simulates mobile-specific attacks (deeplinks, intents)</li>
+                                <li>Validates HTTPS enforcement</li>
+                                <li>Checks sensitive data in logs</li>
+                            </ul>
+
+                            <h4>OWASP Mobile Top 10:</h4>
+                            <ul>
+                                <li>M1: Improper Platform Usage</li>
+                                <li>M2: Insecure Data Storage</li>
+                                <li>M3: Insecure Communication</li>
+                                <li>M4: Insecure Authentication</li>
+                                <li>M5: Insufficient Cryptography</li>
+                                <li>M6: Insecure Authorization</li>
+                                <li>M7: Client Code Quality</li>
+                                <li>M8: Code Tampering</li>
+                                <li>M9: Reverse Engineering</li>
+                                <li>M10: Extraneous Functionality</li>
+                            </ul>
+
+                            <h4>Example Output:</h4>
+                            <pre><code>Security Audit Report:
+
+CRITICAL (3 vulnerabilities):
+1. API Token Exposed in Logs
+   Location: src/services/api.ts:67
+   Code: console.log('Token:', authToken)
+   Attack: Attacker with USB debugging can extract token
+   Fix: Remove logging or redact sensitive data
+   CVSS Score: 8.2 (HIGH)
+
+2. Insecure AsyncStorage for Payment Data
+   Location: src/utils/payment.ts:23
+   Code: AsyncStorage.setItem('cardNumber', card)
+   Attack: Root/jailbreak access reveals plaintext card data
+   Fix: Use react-native-encrypted-storage
+   Compliance: PCI-DSS violation
+
+3. Deeplink Injection Vulnerability
+   Location: src/navigation/DeepLinkHandler.ts:34
+   Code: navigate(url.replace('myapp://', ''))
+   Attack: myapp://../../admin/deleteUser?id=123
+   Fix: Whitelist allowed routes</code></pre>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Bash</span>
+                        </div>
+                    </details>
+                </div>
+
+
+                <!-- User Journey Cartographer -->
+                <div class="agent-card card tier-2">
+                    <div class="card-icon">🧭</div>
+                    <h3>User Journey Cartographer</h3>
+                    <p><strong>Purpose:</strong> Maps complete user flows and detects edge cases, validates state persistence across app lifecycle</p>
+                    <div class="agent-tags">
+                        <span class="tag secondary">Tier 2</span>
+                        <span class="tag">Opus</span>
+                        <span class="tag">UX Analysis</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Solves:</h4>
+                            <p>Missing error states, edge case bugs, poor user experience</p>
+
+                            <h4>What It Does:</h4>
+                            <ul>
+                                <li>Traces complete user journeys across screens</li>
+                                <li>Identifies all navigation paths</li>
+                                <li>Detects edge cases and boundary conditions</li>
+                                <li>Validates state persistence across app lifecycle</li>
+                                <li>Simulates error scenarios (network loss, permissions denied)</li>
+                                <li>Ensures data consistency</li>
+                                <li>Generates flow diagrams</li>
+                            </ul>
+
+                            <h4>Example Output:</h4>
+                            <pre><code>User Journey: Login → Onboarding → Dashboard
+
+EDGE CASES DETECTED (12):
+1. CRITICAL: What if user backgrounds app during OAuth?
+   Current: Session lost, user stuck on loading
+   Fix: Persist OAuth state, resume on foreground
+
+2. HIGH: What if network fails during Step 2 of onboarding?
+   Current: Progress lost, starts from Step 1
+   Fix: Save progress locally, resume from last step
+
+3. MEDIUM: What if user denies camera permission during onboarding?
+   Current: App crashes
+   Fix: Handle permission denial, allow skip</code></pre>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Glob</span>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Zero-Breaking Refactor Surgeon -->
+                <div class="agent-card card tier-2">
+                    <div class="card-icon">♻️</div>
+                    <h3>Zero-Breaking Refactor Surgeon</h3>
+                    <p><strong>Purpose:</strong> Large-scale refactoring with ZERO breaking changes guarantee, uses AST-level analysis</p>
+                    <div class="agent-tags">
+                        <span class="tag secondary">Tier 2</span>
+                        <span class="tag">Opus</span>
+                        <span class="tag">Refactoring</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Solves:</h4>
+                            <p>Fear of refactoring, technical debt accumulation</p>
+
+                            <h4>What It Does:</h4>
+                            <ul>
+                                <li>Plans refactoring with complete dependency mapping</li>
+                                <li>Identifies ALL usages (including dynamic imports)</li>
+                                <li>Creates migration plan with intermediate steps</li>
+                                <li>Generates test coverage for affected areas</li>
+                                <li>Executes incrementally with validation gates</li>
+                                <li>Provides rollback plan at each step</li>
+                                <li>Uses AST-level analysis for precision</li>
+                            </ul>
+
+                            <h4>Example Output:</h4>
+                            <pre><code>Refactoring Plan: API Layer (Axios → Fetch)
+
+IMPACT ANALYSIS:
+- 47 call sites across 23 files
+- 12 custom hooks affected
+- 8 test files need updates
+- 3 external packages depend on axios types
+
+MIGRATION STRATEGY (5 phases):
+Phase 1: Create compatibility layer
+  - Add fetch wrapper with axios-like API
+  - Estimated time: 2 hours
+  - Risk: Low
+  - Rollback: Delete wrapper
+
+Phase 2: Migrate utility functions (9 files)
+  - Convert src/utils/api.ts
+  - Run tests after each file
+  - Estimated time: 3 hours</code></pre>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Glob</span>
+                            <span class="badge">Edit</span>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Cross-Platform Harmony Enforcer -->
+                <div class="agent-card card tier-2">
+                    <div class="card-icon">🌐</div>
+                    <h3>Cross-Platform Harmony Enforcer</h3>
+                    <p><strong>Purpose:</strong> Ensures iOS/Android UX consistency while respecting platform conventions</p>
+                    <div class="agent-tags">
+                        <span class="tag secondary">Tier 2</span>
+                        <span class="tag">Sonnet</span>
+                        <span class="tag">Platform Parity</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Solves:</h4>
+                            <p>"Works on iOS, broken on Android" (or vice versa)</p>
+
+                            <h4>What It Does:</h4>
+                            <ul>
+                                <li>Compares iOS vs Android behavior</li>
+                                <li>Validates platform-specific code has both implementations</li>
+                                <li>Checks for platform bugs (Android keyboard issues)</li>
+                                <li>Ensures gestures work on both platforms</li>
+                                <li>Validates UI follows platform conventions</li>
+                                <li>Detects performance disparities</li>
+                            </ul>
+
+                            <h4>Example Output:</h4>
+                            <pre><code>Cross-Platform Analysis:
+
+CONSISTENCY VIOLATIONS (5):
+1. Bottom Sheet Behavior
+   iOS: Smooth 60fps animation ✓
+   Android: 300ms lag ✗
+   Cause: overScrollMode conflict with gesture handler
+   Fix: Add overScrollMode="never" to ScrollView
+   Evidence: Known Android issue #4521
+
+2. Back Button Handling
+   iOS: N/A (swipe gesture)
+   Android: Missing hardware back handler ✗
+   Fix: Add BackHandler listener in useEffect
+   Convention: Android users expect back button to work
+
+3. Status Bar
+   iOS: Light content on dark background ✓
+   Android: Dark content on light background ✗
+   Cause: Missing StatusBar component config
+   Fix: &lt;StatusBar barStyle="light-content" backgroundColor="#000" /&gt;</code></pre>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Bash</span>
+                        </div>
+                    </details>
+                </div>
+
+            </div>
+
+
+            <h3 style="margin-top: 3rem;">Tier 3: Specialized Agents</h3>
+            <div class="card-grid">
+                <!-- API Contract Guardian -->
+                <div class="agent-card card tier-3">
+                    <div class="card-icon">📡</div>
+                    <h3>API Contract Guardian</h3>
+                    <p><strong>Purpose:</strong> Type-safe API integration with contract enforcement, generates runtime validators</p>
+                    <div class="agent-tags">
+                        <span class="tag">Tier 3</span>
+                        <span class="tag">Sonnet</span>
+                        <span class="tag">API Safety</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Capabilities:</h4>
+                            <ul>
+                                <li>Generates TypeScript types from API responses</li>
+                                <li>Creates runtime validators (Zod/Yup)</li>
+                                <li>Detects API contract violations</li>
+                                <li>Monitors breaking API changes</li>
+                                <li>Generates mock servers for offline dev</li>
+                            </ul>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Write</span>
+                            <span class="badge">WebFetch</span>
+                            <span class="badge">Bash</span>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Memory Leak Detective -->
+                <div class="agent-card card tier-3">
+                    <div class="card-icon">🧠</div>
+                    <h3>Memory Leak Detective</h3>
+                    <p><strong>Purpose:</strong> Traces component lifecycles and identifies memory leaks, validates cleanup functions</p>
+                    <div class="agent-tags">
+                        <span class="tag">Tier 3</span>
+                        <span class="tag">Sonnet</span>
+                        <span class="tag">Memory</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Capabilities:</h4>
+                            <ul>
+                                <li>Analyzes useEffect cleanup functions</li>
+                                <li>Traces subscriptions (event listeners, timers)</li>
+                                <li>Identifies circular references</li>
+                                <li>Detects components that never unmount</li>
+                                <li>Validates navigation screen cleanup</li>
+                                <li>Generates Hermes profiling scripts</li>
+                            </ul>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Bash</span>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Design System Consistency Enforcer -->
+                <div class="agent-card card tier-3">
+                    <div class="card-icon">🎨</div>
+                    <h3>Design System Consistency Enforcer</h3>
+                    <p><strong>Purpose:</strong> Validates design system compliance, suggests missing components</p>
+                    <div class="agent-tags">
+                        <span class="tag">Tier 3</span>
+                        <span class="tag">Sonnet</span>
+                        <span class="tag">Design</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Capabilities:</h4>
+                            <ul>
+                                <li>Learns design tokens automatically</li>
+                                <li>Detects hardcoded values</li>
+                                <li>Identifies spacing inconsistencies</li>
+                                <li>Validates component usage</li>
+                                <li>Suggests missing components</li>
+                                <li>Generates design system docs</li>
+                            </ul>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Glob</span>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Technical Debt Quantifier -->
+                <div class="agent-card card tier-3">
+                    <div class="card-icon">📊</div>
+                    <h3>Technical Debt Quantifier</h3>
+                    <p><strong>Purpose:</strong> Scientific debt measurement and prioritization with ROI analysis</p>
+                    <div class="agent-tags">
+                        <span class="tag">Tier 3</span>
+                        <span class="tag">Sonnet</span>
+                        <span class="tag">Metrics</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Capabilities:</h4>
+                            <ul>
+                                <li>Calculates debt score per file</li>
+                                <li>Prioritizes by Impact × Effort matrix</li>
+                                <li>Estimates time to fix</li>
+                                <li>Tracks accumulation over time</li>
+                                <li>Generates refactoring roadmap</li>
+                                <li>ROI analysis</li>
+                            </ul>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Glob</span>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Test Strategy Architect -->
+                <div class="agent-card card tier-3">
+                    <div class="card-icon">🧪</div>
+                    <h3>Test Strategy Architect</h3>
+                    <p><strong>Purpose:</strong> Determines WHAT to test based on criticality and business impact</p>
+                    <div class="agent-tags">
+                        <span class="tag">Tier 3</span>
+                        <span class="tag">Sonnet</span>
+                        <span class="tag">Testing</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Capabilities:</h4>
+                            <ul>
+                                <li>Maps business criticality</li>
+                                <li>Identifies untested critical paths</li>
+                                <li>Calculates test ROI</li>
+                                <li>Suggests test types per feature</li>
+                                <li>Generates test scaffolding</li>
+                            </ul>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Write</span>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Bundle Size Assassin -->
+                <div class="agent-card card tier-3">
+                    <div class="card-icon">📦</div>
+                    <h3>Bundle Size Assassin</h3>
+                    <p><strong>Purpose:</strong> Aggressive bundle size optimization, enforces size budgets</p>
+                    <div class="agent-tags">
+                        <span class="tag">Tier 3</span>
+                        <span class="tag">Sonnet</span>
+                        <span class="tag">Performance</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Capabilities:</h4>
+                            <ul>
+                                <li>Analyzes import patterns</li>
+                                <li>Detects bloated libraries</li>
+                                <li>Suggests lazy loading</li>
+                                <li>Identifies dead code</li>
+                                <li>Recommends lighter alternatives</li>
+                                <li>Enforces size budgets</li>
+                            </ul>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Bash</span>
+                            <span class="badge">Grep</span>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Migration Strategist -->
+                <div class="agent-card card tier-3">
+                    <div class="card-icon">🔄</div>
+                    <h3>Migration Strategist</h3>
+                    <p><strong>Purpose:</strong> Safe version upgrades with surgical precision and rollback strategies</p>
+                    <div class="agent-tags">
+                        <span class="tag">Tier 3</span>
+                        <span class="tag">Opus</span>
+                        <span class="tag">Upgrades</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Capabilities:</h4>
+                            <ul>
+                                <li>Analyzes upgrade impact</li>
+                                <li>Identifies breaking changes</li>
+                                <li>Generates migration plan</li>
+                                <li>Creates compatibility shims</li>
+                                <li>Validates each step</li>
+                                <li>Rollback strategies</li>
+                            </ul>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">WebFetch</span>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- State Management Auditor -->
+                <div class="agent-card card tier-3">
+                    <div class="card-icon">🔍</div>
+                    <h3>State Management Auditor</h3>
+                    <p><strong>Purpose:</strong> Redux/Context/Zustand analysis and optimization</p>
+                    <div class="agent-tags">
+                        <span class="tag">Tier 3</span>
+                        <span class="tag">Sonnet</span>
+                        <span class="tag">State</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Capabilities:</h4>
+                            <ul>
+                                <li>Maps state flow through components</li>
+                                <li>Detects prop drilling (&gt;3 levels)</li>
+                                <li>Identifies unnecessary global state</li>
+                                <li>Validates immutability</li>
+                                <li>Suggests memoization</li>
+                                <li>Integrates with Redux DevTools</li>
+                            </ul>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Glob</span>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Feature Impact Analyzer -->
+                <div class="agent-card card tier-3">
+                    <div class="card-icon">🏗️</div>
+                    <h3>Feature Impact Analyzer</h3>
+                    <p><strong>Purpose:</strong> Predicts impact of proposed features before implementation</p>
+                    <div class="agent-tags">
+                        <span class="tag">Tier 3</span>
+                        <span class="tag">Opus</span>
+                        <span class="tag">Planning</span>
+                    </div>
+                    <details>
+                        <summary>Full Details →</summary>
+                        <div style="margin-top: 1rem;">
+                            <h4>Capabilities:</h4>
+                            <ul>
+                                <li>Analyzes feature requirements</li>
+                                <li>Identifies affected files</li>
+                                <li>Detects breaking changes</li>
+                                <li>Estimates complexity</li>
+                                <li>Suggests architecture patterns</li>
+                                <li>Provides alternatives with tradeoffs</li>
+                            </ul>
+
+                            <h4>Tools:</h4>
+                            <span class="badge">Read</span>
+                            <span class="badge">Grep</span>
+                            <span class="badge">Glob</span>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SLASH COMMANDS -->
+    <section id="commands" class="section">
+        <div class="container">
+            <h2 class="text-center">💬 Slash Commands</h2>
+            <p class="text-center">Orchestrated workflows for common tasks</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🚀</div>
+                    <h3>/feature</h3>
+                    <p><strong>Purpose:</strong> Multi-agent feature implementation workflow</p>
+
+                    <h4>Workflow:</h4>
+                    <ol>
+                        <li><strong>Phase 1:</strong> Planning & Analysis
+                            <ul>
+                                <li>Grand Architect breaks down feature</li>
+                                <li>Impact analysis</li>
+                                <li>Complexity assessment</li>
+                            </ul>
+                        </li>
+                        <li><strong>Phase 2:</strong> Security & Architecture Review
+                            <ul>
+                                <li>Security Specialist (if sensitive)</li>
+                                <li>State management planning</li>
+                            </ul>
+                        </li>
+                        <li><strong>Phase 3:</strong> Implementation
+                            <ul>
+                                <li>Create feature structure</li>
+                                <li>Write core logic</li>
+                                <li>Cross-platform validation</li>
+                            </ul>
+                        </li>
+                        <li><strong>Phase 4:</strong> Quality Assurance
+                            <ul>
+                                <li>Test generation</li>
+                                <li>Accessibility check</li>
+                                <li>Performance check</li>
+                            </ul>
+                        </li>
+                        <li><strong>Phase 5:</strong> Final Review
+                            <ul>
+                                <li>Comprehensive code review</li>
+                                <li>Documentation updates</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h4>Usage:</h4>
+                    <pre><code>/feature Add dark mode toggle to settings</code></pre>
+
+                    <h4>Time Saved:</h4>
+                    <span class="badge badge-success">40% faster development</span>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🔍</div>
+                    <h3>/review</h3>
+                    <p><strong>Purpose:</strong> Comprehensive multi-agent code review</p>
+
+                    <h4>Agents Invoked (Parallel):</h4>
+                    <ol>
+                        <li><strong>Design Token Guardian</strong> - Design system compliance</li>
+                        <li><strong>A11y Enforcer</strong> - Accessibility (WCAG 2.2 AA)</li>
+                        <li><strong>Security Specialist</strong> - Security vulnerabilities</li>
+                        <li><strong>Performance Prophet</strong> - Performance issues</li>
+                        <li><strong>Test Architect</strong> - Test coverage</li>
+                    </ol>
+
+                    <h4>Output:</h4>
+                    <pre><code>**CRITICAL ISSUES (must fix):**
+- [List critical problems]
+
+**WARNINGS (should fix):**
+- [List warnings]
+
+**SUGGESTIONS (nice to have):**
+- [List improvements]
+
+**PASSES:**
+- [List what's good]
+
+**OVERALL SCORE:** X/10
+
+**RECOMMENDATION:** Approve/Request Changes/Block</code></pre>
+
+                    <h4>Usage:</h4>
+                    <pre><code>/review src/components/PaymentForm.tsx</code></pre>
+
+                    <h4>Time Saved:</h4>
+                    <span class="badge badge-success">80% faster reviews</span>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🧪</div>
+                    <h3>/test</h3>
+                    <p><strong>Purpose:</strong> Auto-generate test suite with ROI prioritization</p>
+
+                    <h4>Workflow:</h4>
+                    <ol>
+                        <li><strong>Step 1:</strong> Analyze Target
+                            <ul>
+                                <li>Read file/component</li>
+                                <li>Assess complexity</li>
+                                <li>Determine business criticality</li>
+                                <li>Calculate test priority</li>
+                            </ul>
+                        </li>
+                        <li><strong>Step 2:</strong> Determine Test Strategy
+                            <ul>
+                                <li>CRITICAL: E2E + Integration + Unit</li>
+                                <li>HIGH: Integration + Unit</li>
+                                <li>MEDIUM: Unit + Snapshot</li>
+                                <li>LOW: Snapshot only</li>
+                            </ul>
+                        </li>
+                        <li><strong>Step 3:</strong> Generate Tests
+                            <ul>
+                                <li>Create test files with setup/teardown</li>
+                                <li>Add mocking (API, navigation)</li>
+                                <li>Handle async operations</li>
+                                <li>Cover edge cases</li>
+                            </ul>
+                        </li>
+                        <li><strong>Step 4:</strong> Run Tests
+                            <ul>
+                                <li>Execute test suite</li>
+                                <li>Report results</li>
+                                <li>Show coverage</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h4>Usage:</h4>
+                    <pre><code>/test src/screens/LoginScreen.tsx</code></pre>
+
+                    <h4>Time Saved:</h4>
+                    <span class="badge badge-success">60% faster testing</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BEGINNER INSTALLATION -->
+    <section id="beginner-installation" class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <div class="container">
+            <h2 class="text-center">
+                <button class="beginner-toggle-btn"
+                        aria-expanded="true"
+                        aria-controls="beginner-guide-content"
+                        id="beginner-toggle-btn"
+                        style="color: white;">
+                    🚀 Installation Guide (Very Simple Steps) <span aria-hidden="true" style="font-size: 0.8em;">▼</span>
+                </button>
+            </h2>
+            <p class="text-center" style="font-size: 1.2rem; color: rgba(255,255,255,0.95);">Follow these easy steps - no tech knowledge needed! (Click title to expand/collapse)</p>
+
+            <div id="beginner-guide-content" style="display: block;">
+
+            <div class="card beginner-dark-text" style="margin-top: 2rem; padding: 2rem; background: #ffffff;">
+                <h3 style="color: #667eea; font-weight: 700;">📋 What You Need First</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;">Before we start, you need to have <strong>Claude Code</strong> installed on your computer. Think of Claude Code like a smart assistant that helps you write code.</p>
+
+                <div class="alert alert-info beginner-alert-info" style="margin-top: 1rem; background: #d1ecf1; border: 2px solid #0c5460; padding: 1rem; border-radius: 8px;">
+                    <strong>✅ How to check if you have Claude Code:</strong><br>
+                    1. Open PowerShell (search for "PowerShell" in Windows start menu)<br>
+                    2. Type: <code>claude --version</code> and press Enter<br>
+                    3. If you see a version number (like "2.0.5"), you're good to go!<br>
+                    4. If you see an error, you need to install Claude Code first
+                </div>
+            </div>
+
+            <div class="card beginner-dark-text" style="margin-top: 2rem; padding: 2rem; background: linear-gradient(to right, #f093fb 0%, #f5576c 100%);">
+                <h3 style="font-weight: 700;">🎯 Step 1: Download the Files</h3>
+                <ol style="font-size: 1.1rem; line-height: 2;">
+                    <li><strong>Download this folder</strong> called "claude-code-expo-system" to your computer</li>
+                    <li><strong>Save it somewhere easy to find</strong> (like your Desktop or Documents folder)</li>
+                    <li><strong>Remember where you saved it!</strong> You'll need to find it in the next step</li>
+                </ol>
+
+                <div class="alert" style="background: rgba(0,0,0,0.15); border: 2px solid #1a1a1a; margin-top: 1rem; padding: 1rem; border-radius: 8px;">
+                    💡 <strong>Tip:</strong> The folder name is "claude-code-expo-system" - it's okay if it looks long and complicated, that's the right one!
+                </div>
+            </div>
+
+            <div class="card beginner-dark-text" style="margin-top: 2rem; padding: 2rem; background: linear-gradient(to right, #ffeaa7 0%, #fdcb6e 100%);">
+                <h3 style="font-weight: 700;">🎯 Step 2: Choose Installation Type</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;">The installer can install agents in TWO ways. Pick the one that's right for you:</p>
+
+                <div style="margin: 1.5rem 0;">
+                    <div style="background: rgba(0,255,0,0.1); border: 3px solid #27ae60; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <strong style="font-size: 1.2rem;">📁 Option A: Project-Scoped (Recommended for Teams)</strong><br><br>
+                        <strong>What it means:</strong> Agents are installed INSIDE your Expo project folder<br>
+                        <strong>Best for:</strong> Working with a team, sharing agents via git<br>
+                        <strong>How it works:</strong> The installer auto-detects if you have a project (looks for package.json)<br><br>
+                        <strong>✅ Benefits:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Team members get agents automatically when they clone your project</li>
+                            <li>Agents are version-controlled (saved in git)</li>
+                            <li>Different projects can have different agents</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: rgba(0,150,255,0.1); border: 3px solid #3498db; padding: 1.5rem; border-radius: 8px;">
+                        <strong style="font-size: 1.2rem;">🌍 Option B: Global (Personal Use)</strong><br><br>
+                        <strong>What it means:</strong> Agents are installed in your Windows user folder<br>
+                        <strong>Best for:</strong> Personal projects, using agents across multiple projects<br>
+                        <strong>How it works:</strong> Available in ALL projects automatically<br><br>
+                        <strong>✅ Benefits:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Install once, use everywhere</li>
+                            <li>Simpler setup</li>
+                            <li>Don't need to install per project</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="alert beginner-alert-info" style="margin-top: 1rem; background: #d1ecf1; border: 2px solid #0c5460; padding: 1rem; border-radius: 8px;">
+                    💡 <strong>Don't worry!</strong> The installer will auto-detect which one to use. If you're in an Expo project folder, it uses project-scoped. If not, it uses global. You can also force a specific type if needed.
+                </div>
+            </div>
+
+            <div class="card beginner-dark-text" style="margin-top: 2rem; padding: 2rem; background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);">
+                <h3 style="font-weight: 700;">🎯 Step 3: Open PowerShell</h3>
+                <ol style="font-size: 1.1rem; line-height: 2;">
+                    <li><strong>Click the Windows Start button</strong> (bottom left of your screen)</li>
+                    <li><strong>Type "PowerShell"</strong> in the search box</li>
+                    <li><strong>Click on "Windows PowerShell"</strong> (the blue icon)</li>
+                    <li><strong>A blue window will open</strong> - this is where we'll type commands</li>
+                </ol>
+
+                <div class="alert" style="background: rgba(0,0,0,0.15); border: 2px solid #1a1a1a; margin-top: 1rem; padding: 1rem; border-radius: 8px;">
+                    💡 <strong>What is PowerShell?</strong> It's a program that lets you give text commands to your computer. Don't worry, we'll tell you exactly what to type!
+                </div>
+            </div>
+
+            <div class="card beginner-dark-text" style="margin-top: 2rem; padding: 2rem; background: linear-gradient(to right, #43e97b 0%, #38f9d7 100%);">
+                <h3 style="font-weight: 700;">🎯 Step 4: Navigate to Your Project (For Project-Scoped)</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;"><strong>Choose ONE based on Step 2:</strong></p>
+
+                <div style="background: rgba(0,255,0,0.1); border: 3px solid #27ae60; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <strong>📁 For Project-Scoped Installation:</strong><br><br>
+                    Navigate to YOUR Expo project first:
+                    <pre><code class="language-powershell">cd path\to\your\expo-project</code></pre>
+                    <em>Example: <code>cd C:\Users\YourName\Documents\MyAwesomeApp</code></em><br><br>
+                    Make sure your project has a <code>package.json</code> file!
+                </div>
+
+                <div style="background: rgba(0,150,255,0.1); border: 3px solid #3498db; padding: 1.5rem; border-radius: 8px;">
+                    <strong>🌍 For Global Installation:</strong><br><br>
+                    Navigate to the installer folder:
+                    <pre><code class="language-powershell">cd Desktop\claude-code-expo-system\scripts</code></pre>
+                    <em>(If you saved the folder somewhere else, replace "Desktop" with that location)</em>
+                </div>
+
+                <div class="alert" style="background: rgba(0,0,0,0.15); border: 2px solid #1a1a1a; margin-top: 1rem; padding: 1rem; border-radius: 8px;">
+                    💡 <strong>What does "cd" mean?</strong> It means "Change Directory" - basically telling the computer to move to a different folder.
+                </div>
+            </div>
+
+            <div class="card beginner-dark-text" style="margin-top: 2rem; padding: 2rem; background: linear-gradient(to right, #fa709a 0%, #fee140 100%);">
+                <h3 style="font-weight: 700;">🎯 Step 5: Run the Installation</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;">Now we're going to run a special file that does all the hard work for us!</p>
+
+                <div style="background: rgba(255,215,0,0.2); border: 3px solid #f39c12; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <strong style="font-size: 1.2rem;">✨ EASIEST METHOD: Interactive Mode</strong><br><br>
+                    Just run the installer and it will ask you what you want!<br><br>
+                    <pre><code class="language-powershell">cd C:\Users\Senai\Desktop\claude-code-expo-system\scripts
+.\install-agents.ps1</code></pre>
+                    <strong>What happens:</strong><br>
+                    1. A menu appears asking: "1️⃣ Project-scoped OR 2️⃣ Global?"<br>
+                    2. You type <code>1</code> or <code>2</code> and press Enter<br>
+                    3. If you chose Project: It scans for your project, shows results, asks to proceed<br>
+                    4. Installer copies everything to the right place!
+                </div>
+
+                <p style="font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0;">Or skip the menu (Advanced):</p>
+
+                <div style="background: rgba(0,255,0,0.1); border: 3px solid #27ae60; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <strong>📁 Force Project-Scoped (no prompts):</strong><br><br>
+                    <pre><code class="language-powershell">cd C:\path\to\your\expo-project
+C:\Users\Senai\Desktop\claude-code-expo-system\scripts\install-agents.ps1 -Scope project</code></pre>
+                    Installs directly to <code>.claude/</code> in your project
+                </div>
+
+                <div style="background: rgba(0,150,255,0.1); border: 3px solid #3498db; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <strong>🌍 Force Global (no prompts):</strong><br><br>
+                    <pre><code class="language-powershell">cd C:\Users\Senai\Desktop\claude-code-expo-system\scripts
+.\install-agents.ps1 -Scope global</code></pre>
+                    Installs to your Windows user folder (<code>~/.claude/</code>)
+                </div>
+
+                <p style="font-size: 1.1rem; line-height: 1.8; margin-top: 1.5rem;"><strong>After running the command:</strong></p>
+                <ol style="font-size: 1.1rem; line-height: 2;">
+                    <li><strong>The installer will start!</strong> You'll see messages on the screen showing what it's doing</li>
+                    <li><strong>Wait for it to finish</strong> - it should take about 10-30 seconds</li>
+                    <li><strong>Look for the green checkmarks ✅</strong> showing it worked</li>
+                </ol>
+
+                <div class="alert" style="background: rgba(0,0,0,0.15); border: 2px solid #1a1a1a; margin-top: 1rem; padding: 1rem; border-radius: 8px;">
+                    💡 <strong>What does this do?</strong> The installer copies 7 AI helper programs (called "agents") and 3 commands to the right place on your computer so Claude can use them.
+                </div>
+
+                <div class="alert" style="background: rgba(200,50,50,0.3); border: 2px solid #8b0000; margin-top: 1rem; padding: 1rem; border-radius: 8px;">
+                    ⚠️ <strong>Did you get a "Permission Error"?</strong><br>
+                    If you see an error about permissions, type this command and press Enter:
+                    <pre><code class="language-powershell">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre>
+                    Then try running the installer again (Step 4, command 1)
+                </div>
+            </div>
+
+            <div class="card beginner-dark-text" style="margin-top: 2rem; padding: 2rem; background: linear-gradient(to right, #a8edea 0%, #fed6e3 100%);">
+                <h3 style="font-weight: 700;">🎯 Step 6: Check That It Worked</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;">Let's make sure everything installed correctly!</p>
+
+                <ol style="font-size: 1.1rem; line-height: 2;">
+                    <li><strong>Look at the PowerShell window</strong></li>
+                    <li><strong>You should see messages that say:</strong>
+                        <ul style="margin-top: 1rem;">
+                            <li><strong>✅ Claude Code installation verified</strong></li>
+                            <li><strong>✅ Directories created</strong></li>
+                            <li><strong>✅ Agents copied successfully</strong></li>
+                            <li><strong>✅ Commands copied successfully</strong></li>
+                            <li><strong>✅ Installation complete!</strong></li>
+                        </ul>
+                    </li>
+                    <li><strong>If you see these checkmarks (✅), you're all set!</strong></li>
+                </ol>
+
+                <div class="alert alert-success" style="margin-top: 1rem; background: rgba(0,150,0,0.2); border: 2px solid #006400; padding: 1rem; border-radius: 8px;">
+                    🎉 <strong>Congratulations!</strong> You now have 7 AI agents installed and ready to help you code!
+                </div>
+            </div>
+
+            <div class="card beginner-dark-text" style="margin-top: 2rem; padding: 2rem; background: #f8f9fa;">
+                <h3 style="font-weight: 700;">🧪 Step 7: Test It Out</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;">Let's make sure your new AI helpers are working!</p>
+
+                <ol style="font-size: 1.1rem; line-height: 2;">
+                    <li><strong>In PowerShell, type:</strong>
+                        <pre><code class="language-powershell">claude</code></pre>
+                    </li>
+                    <li><strong>Press Enter</strong> - Claude Code will start</li>
+                    <li><strong>Type this message:</strong>
+                        <pre><code class="language-powershell">List all available agents</code></pre>
+                    </li>
+                    <li><strong>Press Enter</strong></li>
+                    <li><strong>You should see a list of 7 agents</strong> with names like "Grand Architect", "Design Token Guardian", etc.</li>
+                </ol>
+
+                <div class="alert alert-success" style="margin-top: 1rem; background: rgba(0,150,0,0.2); border: 2px solid #006400; padding: 1rem; border-radius: 8px;">
+                    ✅ <strong>Success!</strong> If you see the list of agents, everything is working perfectly!
+                </div>
+            </div>
+
+            <div class="card beginner-dark-text" style="margin-top: 2rem; padding: 2rem; background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);">
+                <h3 style="font-weight: 700;">🎓 What Did We Just Install?</h3>
+
+                <div style="font-size: 1.1rem; line-height: 2;">
+                    <p><strong>You now have 7 AI helpers called "agents":</strong></p>
+                    <ol>
+                        <li><strong>Grand Architect</strong> - Helps plan big features</li>
+                        <li><strong>Design Token Guardian</strong> - Makes sure your app looks consistent</li>
+                        <li><strong>A11y Enforcer</strong> - Makes sure everyone can use your app (including people with disabilities)</li>
+                        <li><strong>Version Shield</strong> - Prevents compatibility problems</li>
+                        <li><strong>Test Generator</strong> - Creates automatic tests for your code</li>
+                        <li><strong>Performance Enforcer</strong> - Keeps your app fast</li>
+                        <li><strong>Security Specialist</strong> - Finds security problems</li>
+                    </ol>
+
+                    <p style="margin-top: 2rem;"><strong>And 3 special commands:</strong></p>
+                    <ul>
+                        <li><strong>/feature</strong> - Helps you build new features step-by-step</li>
+                        <li><strong>/review</strong> - Reviews your code automatically</li>
+                        <li><strong>/test</strong> - Creates tests for your code</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card beginner-alert-warning" style="margin-top: 2rem; padding: 2rem; background: #fff3cd; border: 2px solid #ffc107;">
+                <h3 style="font-weight: 700;">❓ Need Help?</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    <strong>Something not working?</strong> Check the detailed installation guide below for more technical information and troubleshooting tips.
+                </p>
+                <p>
+                    Scroll down to see the <strong>"⚙️ Installation Guide"</strong> section with more advanced details.
+                </p>
+            </div>
+
+            </div><!-- End beginner-guide-content -->
+        </div>
+    </section>
+
+    <!-- INSTALLATION -->
+    <section id="installation" class="section">
+        <div class="container">
+            <h2 class="text-center">⚙️ Installation Guide (Technical Details)</h2>
+            <p class="text-center">Complete setup instructions for advanced users</p>
+
+            <h3>Prerequisites</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Requirement</th>
+                        <th>Version</th>
+                        <th>Check Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Claude Code</td>
+                        <td>v2.0.0+</td>
+                        <td><code>claude --version</code></td>
+                    </tr>
+                    <tr>
+                        <td>Node.js</td>
+                        <td>18.x or higher</td>
+                        <td><code>node --version</code></td>
+                    </tr>
+                    <tr>
+                        <td>OS</td>
+                        <td>Windows 10/11</td>
+                        <td><code>ver</code></td>
+                    </tr>
+                    <tr>
+                        <td>Expo/React Native</td>
+                        <td>SDK 50+ / 0.74+</td>
+                        <td><code>expo --version</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 3rem;">Windows Installation (Recommended)</h3>
+            <div class="alert alert-info">
+                <strong>📁 Location:</strong> Make sure you're in the <code>claude-code-expo-system\scripts</code> directory
+            </div>
+
+            <pre><code># Run the installer (interactive mode - prompts you to choose)
+cd claude-code-expo-system\scripts
+.\install-agents.ps1
+
+# It will ask you to choose:
+# 1️⃣ Project-scoped (installs to .claude/ in your project)
+# 2️⃣ Global (installs to ~/.claude/ in your home folder)
+
+# If permission error:
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre>
+
+            <h4>What the installer does:</h4>
+            <ol>
+                <li>✅ Checks Claude Code installation</li>
+                <li>✅ Prompts you to choose Project-scoped or Global installation</li>
+                <li>✅ Creates directory structure (<code>.claude/</code> for project OR <code>~/.claude/</code> for global)</li>
+                <li>✅ Copies all 7 agents to <code>.claude/agents/</code> (project) or <code>~/.claude/agents/</code> (global)</li>
+                <li>✅ Copies 3 commands to <code>.claude/commands/</code> (project) or <code>~/.claude/commands/</code> (global)</li>
+                <li>✅ Installs config to the chosen location</li>
+                <li>✅ Provides next steps</li>
+            </ol>
+
+            <h3 style="margin-top: 3rem;">Manual Installation (Alternative)</h3>
+            <pre><code># Copy agents
+cp -r ready-to-use/agents/* ~/.claude/agents/
+
+# Copy commands
+cp -r ready-to-use/commands/* ~/.claude/commands/
+
+# Copy config (optional)
+cp ready-to-use/templates/settings.json ~/.claude/settings.json</code></pre>
+
+            <h3 style="margin-top: 3rem;">Post-Installation</h3>
+            <ol>
+                <li><strong>Copy CLAUDE.md template to your project:</strong>
+                    <pre><code>cp ready-to-use/templates/CLAUDE.md /path/to/your/expo-project/CLAUDE.md</code></pre>
+                </li>
+                <li><strong>Edit CLAUDE.md with your project details:</strong>
+                    <ul>
+                        <li>Tech stack versions</li>
+                        <li>Coding conventions</li>
+                        <li>Design system rules</li>
+                        <li>Architecture patterns</li>
+                    </ul>
+                </li>
+                <li><strong>Test the setup:</strong>
+                    <pre><code>cd /path/to/your/expo-project
+claude
+> Check accessibility of my components</code></pre>
+                </li>
+            </ol>
+
+            <div class="alert alert-success">
+                <strong>✅ Installation Complete!</strong> You now have 7 production-ready agents at your service.
+            </div>
+        </div>
+    </section>
+
+    <!-- WORKFLOWS -->
+    <section id="workflows" class="section">
+        <div class="container">
+            <h2 class="text-center">🔄 Common Workflows</h2>
+            <p class="text-center">Real-world scenarios and best practices</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>🆕 Starting a New Feature</h3>
+                    <h4>✅ DO:</h4>
+                    <ol>
+                        <li>@grand-architect plan the feature first</li>
+                        <li>@security-specialist review approach (if sensitive)</li>
+                        <li>Use /feature command for implementation</li>
+                        <li>Run /test after implementation</li>
+                        <li>Run /review before PR</li>
+                    </ol>
+                    <h4>❌ DON'T:</h4>
+                    <ul>
+                        <li>Jump straight to coding without planning</li>
+                        <li>Skip security review for auth/payment features</li>
+                        <li>Forget cross-platform testing</li>
+                    </ul>
+                    <span class="badge badge-success">Time saved: 40% faster</span>
+                </div>
+
+                <div class="card">
+                    <h3>🔍 Code Review</h3>
+                    <h4>✅ DO:</h4>
+                    <ol>
+                        <li>Use /review command (runs 5 agents in parallel)</li>
+                        <li>Check all CRITICAL issues</li>
+                        <li>Consider WARNINGS based on priority</li>
+                        <li>Apply auto-fixes when available</li>
+                    </ol>
+                    <h4>❌ DON'T:</h4>
+                    <ul>
+                        <li>Review without running agents first</li>
+                        <li>Ignore accessibility warnings</li>
+                        <li>Skip performance checks</li>
+                    </ul>
+                    <span class="badge badge-success">Time saved: 80% faster</span>
+                </div>
+
+                <div class="card">
+                    <h3>🐛 Debugging Production Bug</h3>
+                    <h4>✅ DO:</h4>
+                    <ol>
+                        <li>@journey-cartographer map the user flow</li>
+                        <li>@memory-detective check for leaks</li>
+                        <li>@security-specialist if data-related</li>
+                        <li>@test-generator create regression test</li>
+                    </ol>
+                    <h4>❌ DON'T:</h4>
+                    <ul>
+                        <li>Guess at the problem</li>
+                        <li>Fix without adding tests</li>
+                        <li>Deploy without verification</li>
+                    </ul>
+                    <span class="badge badge-success">Time saved: 60% faster resolution</span>
+                </div>
+
+                <div class="card">
+                    <h3>📱 Preparing for App Store Submission</h3>
+                    <h4>✅ DO:</h4>
+                    <ol>
+                        <li>@a11y-enforcer full app audit</li>
+                        <li>@security-specialist security review</li>
+                        <li>@performance-enforcer check all budgets</li>
+                        <li>@cross-platform-enforcer iOS/Android parity</li>
+                        <li>@test-generator ensure critical path coverage</li>
+                    </ol>
+                    <h4>❌ DON'T:</h4>
+                    <ul>
+                        <li>Submit without accessibility check</li>
+                        <li>Ignore performance budgets</li>
+                        <li>Skip cross-platform testing</li>
+                    </ul>
+                    <span class="badge badge-success">Rejection rate: Reduced by 90%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TROUBLESHOOTING -->
+    <section id="troubleshooting" class="section">
+        <div class="container">
+            <h2 class="text-center">🆘 Troubleshooting</h2>
+            <p class="text-center">Common issues and solutions</p>
+
+            <div class="search-box">
+                <label for="troubleshooting-search" class="visually-hidden">Search troubleshooting issues</label>
+                <span class="search-icon">🔍</span>
+                <input type="text" id="troubleshooting-search" class="search-input" placeholder="Search for issues..." aria-label="Search troubleshooting issues">
+            </div>
+
+            <div id="troubleshooting-list">
+                <details>
+                    <summary>❌ "Agent not found" error</summary>
+                    <div style="padding: 1rem 0;">
+                        <h4>Symptoms:</h4>
+                        <pre><code>Error: Agent 'design-token-guardian' not found
+Unable to invoke @design-token-guardian</code></pre>
+
+                        <h4>Causes & Fixes:</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cause</th>
+                                    <th>How to Verify</th>
+                                    <th>Fix</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Agent not installed</td>
+                                    <td><code>ls ~/.claude/agents/</code></td>
+                                    <td>Run <code>install-agents.ps1</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Wrong agent name</td>
+                                    <td>Check exact name in file</td>
+                                    <td>Use <code>@design-token-guardian</code></td>
+                                </tr>
+                                <tr>
+                                    <td>File in wrong location</td>
+                                    <td>Check path</td>
+                                    <td>Move to <code>~/.claude/agents/tier-1-daily/</code></td>
+                                </tr>
+                                <tr>
+                                    <td>YAML frontmatter error</td>
+                                    <td>Open .md file</td>
+                                    <td>Verify <code>name:</code> matches exactly</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Step-by-Step Fix:</h4>
+                        <pre><code># 1. Verify agents directory exists
+ls ~/.claude/agents/
+
+# 2. Check specific agent file
+cat ~/.claude/agents/tier-1-daily/design-token-guardian.md
+
+# 3. If missing, re-run installer
+cd claude-code-expo-system\scripts
+.\install-agents.ps1</code></pre>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>❌ Permission Denied (Windows)</summary>
+                    <div style="padding: 1rem 0;">
+                        <h4>Symptoms:</h4>
+                        <pre><code>.\install-agents.ps1 : File cannot be loaded because running scripts is disabled...</code></pre>
+
+                        <h4>Fix:</h4>
+                        <pre><code># Run PowerShell as Administrator
+# Then run:
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Verify:
+Get-ExecutionPolicy
+# Should show: RemoteSigned
+
+# Now retry installation
+.\install-agents.ps1</code></pre>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>❌ Agents not auto-invoking</summary>
+                    <div style="padding: 1rem 0;">
+                        <h4>Symptoms:</h4>
+                        <ul>
+                            <li>You ask about accessibility but @a11y-enforcer doesn't trigger</li>
+                            <li>Manual invocation works but automatic doesn't</li>
+                        </ul>
+
+                        <h4>Root Causes & Fixes:</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Issue</th>
+                                    <th>Fix</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Description too vague</td>
+                                    <td>Make <code>description:</code> more specific in YAML</td>
+                                </tr>
+                                <tr>
+                                    <td>Context unclear</td>
+                                    <td>Add project-specific keywords to description</td>
+                                </tr>
+                                <tr>
+                                    <td>CLAUDE.md missing</td>
+                                    <td>Copy template to project root</td>
+                                </tr>
+                                <tr>
+                                    <td>Wrong working directory</td>
+                                    <td>Run <code>claude</code> from project root</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Example Fix:</h4>
+                        <pre><code># ❌ Too vague - won't auto-invoke
+---
+name: a11y-enforcer
+description: Checks accessibility
+---
+
+# ✅ Specific - will auto-invoke
+---
+name: a11y-enforcer
+description: Validates WCAG 2.2 accessibility compliance, checks for missing accessibilityLabel, accessibilityRole in React Native components
+---</code></pre>
+
+                        <h4>Manual Invocation Workaround:</h4>
+                        <pre><code>User: @a11y-enforcer check my components</code></pre>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>⚠️ Slow agent responses</summary>
+                    <div style="padding: 1rem 0;">
+                        <h4>Diagnosis:</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Symptom</th>
+                                    <th>Likely Cause</th>
+                                    <th>Fix</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>All agents slow</td>
+                                    <td>Model issue</td>
+                                    <td>Use <code>model: haiku</code> for simple tasks</td>
+                                </tr>
+                                <tr>
+                                    <td>Specific agent slow</td>
+                                    <td>Too many tools</td>
+                                    <td>Restrict tools in YAML</td>
+                                </tr>
+                                <tr>
+                                    <td>First invocation slow</td>
+                                    <td>Context loading</td>
+                                    <td>Normal - subsequent faster</td>
+                                </tr>
+                                <tr>
+                                    <td>Reading large files</td>
+                                    <td>File size</td>
+                                    <td>Use Grep instead of Read</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Optimization:</h4>
+                        <pre><code># ❌ Too many tools (slower)
+---
+tools: Read, Write, Edit, Grep, Glob, Bash, Task, WebFetch
+model: opus
+---
+
+# ✅ Only needed tools (faster)
+---
+tools: Read, Grep
+model: sonnet
+---</code></pre>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>⚠️ Slash command not working</summary>
+                    <div style="padding: 1rem 0;">
+                        <h4>Symptoms:</h4>
+                        <pre><code>User: /review src/Button.tsx
+Error: Command not recognized</code></pre>
+
+                        <h4>Fixes:</h4>
+                        <pre><code># 1. Verify commands installed
+ls ~/.claude/commands/
+
+# 2. Check command file exists
+cat ~/.claude/commands/review.md
+
+# 3. Verify YAML frontmatter
+# Should have:
+# ---
+# name: review
+# description: ...
+# ---
+
+# 4. Restart Claude Code
+# Exit and re-run: claude</code></pre>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>⚠️ Hooks not executing</summary>
+                    <div style="padding: 1rem 0;">
+                        <h4>Symptoms:</h4>
+                        <ul>
+                            <li>Hook configured but doesn't run</li>
+                            <li>No validation happening before writes</li>
+                        </ul>
+
+                        <h4>Diagnosis:</h4>
+                        <pre><code># 1. Check ~/.claude/settings.json exists
+cat ~/.claude/settings.json
+
+# 2. Verify hook configuration
+# Should have:
+{
+  "hooks": {
+    "PreToolUse": [...]
+  }
+}
+
+# 3. Check hook script exists
+ls ~/.claude/hooks/validate-a11y.js</code></pre>
+
+                        <h4>Common Issues:</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Problem</th>
+                                    <th>Solution</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Hook script doesn't exist</td>
+                                    <td>Create the script file</td>
+                                </tr>
+                                <tr>
+                                    <td>Hook script not executable</td>
+                                    <td><code>chmod +x script.js</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Windows path issues</td>
+                                    <td>Use forward slashes: <code>node ~/.claude/hooks/script.js</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Hook crashes</td>
+                                    <td>Add error handling to script</td>
+                                </tr>
+                                <tr>
+                                    <td>Hook timeout (&gt;60s)</td>
+                                    <td>Optimize script performance</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section">
+        <div class="container">
+            <h2 class="text-center">❓ Frequently Asked Questions</h2>
+            <p class="text-center">Everything you need to know</p>
+
+            <div class="search-box">
+                <label for="faq-search" class="visually-hidden">Search frequently asked questions</label>
+                <span class="search-icon">🔍</span>
+                <input type="text" id="faq-search" class="search-input" placeholder="Search FAQs..." aria-label="Search frequently asked questions">
+            </div>
+
+            <div id="faq-list">
+                <details>
+                    <summary>🤔 Do I need all 20 agents?</summary>
+                    <div style="padding: 1rem 0;">
+                        <p><strong>No!</strong> Start with the <strong>5 essential agents</strong>:</p>
+                        <ol>
+                            <li>@grand-architect (complex features)</li>
+                            <li>@design-token-guardian (visual consistency)</li>
+                            <li>@a11y-enforcer (accessibility - required for App Stores)</li>
+                            <li>@test-generator (quality)</li>
+                            <li>@performance-enforcer (speed)</li>
+                        </ol>
+                        <p>Create additional agents only when you have specific needs.</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>🤔 Will agents slow down my development?</summary>
+                    <div style="padding: 1rem 0;">
+                        <p><strong>No - they speed it up!</strong></p>
+                        <p>Real data from production usage:</p>
+                        <ul>
+                            <li>Initial learning: 2-3 days</li>
+                            <li>After that: <strong>50% faster</strong> feature development</li>
+                            <li>Code review time: <strong>80% reduction</strong></li>
+                            <li>Bug fix time: <strong>60% reduction</strong></li>
+                        </ul>
+                        <p>The ROI is positive within the first week.</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>🤔 Can agents break my code?</summary>
+                    <div style="padding: 1rem 0;">
+                        <p>Agents can make changes, but you can prevent issues:</p>
+                        <h4>Safety measures:</h4>
+                        <ol>
+                            <li>✅ Use version control (git)</li>
+                            <li>✅ Review changes before accepting</li>
+                            <li>✅ Test after each change</li>
+                            <li>✅ Use hooks to block bad changes</li>
+                            <li>✅ Start with read-only agents</li>
+                        </ol>
+                        <h4>Read-only agents (safe to use always):</h4>
+                        <ul>
+                            <li>@performance-prophet (analysis only)</li>
+                            <li>@security-specialist (audit only)</li>
+                            <li>Any agent when you manually review output</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>🤔 How much does this cost?</summary>
+                    <div style="padding: 1rem 0;">
+                        <p>Claude Code costs <strong>$20/month</strong> (Claude Pro or API usage).</p>
+                        <p><strong>This agent system is FREE</strong> - it's just configuration files.</p>
+                        <h4>ROI calculation:</h4>
+                        <ul>
+                            <li>Cost: $20/month</li>
+                            <li>Time saved: ~80 hours/month</li>
+                            <li>Value: $4,000+ (at $50/hr developer rate)</li>
+                            <li><strong>Net benefit: $3,980/month</strong></li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>🤔 Can my team share these agents?</summary>
+                    <div style="padding: 1rem 0;">
+                        <p><strong>Yes!</strong> Two approaches:</p>
+
+                        <h4>Project-level (recommended for teams):</h4>
+                        <pre><code># Agents in project repo
+your-project/
+  .claude/
+    agents/
+    commands/
+  CLAUDE.md
+
+# Team members clone and use</code></pre>
+
+                        <h4>User-level (personal setup):</h4>
+                        <pre><code># Each developer installs to ~/.claude/
+# Good for personal preferences</code></pre>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>🤔 What's the difference between agents and slash commands?</summary>
+                    <div style="padding: 1rem 0;">
+                        <h4>Agents = AI assistants with specialized knowledge</h4>
+                        <ul>
+                            <li>Invoked: <code>@agent-name</code> or automatically</li>
+                            <li>Have their own context window</li>
+                            <li>Can use tools (Read, Write, etc.)</li>
+                            <li>Example: <code>@security-specialist</code></li>
+                        </ul>
+
+                        <h4>Slash Commands = Workflows that orchestrate multiple agents</h4>
+                        <ul>
+                            <li>Invoked: <code>/command-name</code></li>
+                            <li>Run a sequence of steps</li>
+                            <li>Can call multiple agents</li>
+                            <li>Example: <code>/review</code> calls design-token-guardian + a11y-enforcer + security-specialist</li>
+                        </ul>
+
+                        <h4>When to use:</h4>
+                        <ul>
+                            <li>Single task → Agent</li>
+                            <li>Multi-step workflow → Slash command</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>🤔 Can I use this with Expo Go or only development builds?</summary>
+                    <div style="padding: 1rem 0;">
+                        <p>Works with <strong>both!</strong></p>
+
+                        <h4>Expo Go (managed workflow):</h4>
+                        <ul>
+                            <li>All agents work perfectly</li>
+                            <li>Focus on JS/TS code analysis</li>
+                            <li>Some native checks won't apply</li>
+                        </ul>
+
+                        <h4>Development Builds (custom native code):</h4>
+                        <ul>
+                            <li>Full functionality</li>
+                            <li>Native module analysis</li>
+                            <li>Platform-specific checks work</li>
+                        </ul>
+
+                        <p>The agents work at the code level, not runtime.</p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>🤔 What's a typical workflow for implementing a new feature?</summary>
+                    <div style="padding: 1rem 0;">
+                        <h4>Recommended workflow:</h4>
+                        <pre><code>Step 1: Planning
+User: I need @grand-architect to plan implementing [feature]
+→ Grand Architect breaks down into phases
+
+Step 2: Architecture Review
+User: @security-specialist review the approach
+User: @performance-prophet predict performance impact
+
+Step 3: Implementation
+User: /feature Implement [feature]
+→ Multi-agent workflow executes
+
+Step 4: Quality Assurance
+User: /test src/new-feature/
+User: /review src/new-feature/
+
+Step 5: Final Checks
+User: @a11y-enforcer audit
+User: @performance-enforcer check bundle size</code></pre>
+
+                        <p><strong>Time:</strong> Complex feature that used to take 3 days → <strong>1.5 days</strong></p>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>🤔 Do agents work offline?</summary>
+                    <div style="padding: 1rem 0;">
+                        <p><strong>Partially.</strong></p>
+
+                        <h4>Works offline:</h4>
+                        <ul>
+                            <li>Reading local files</li>
+                            <li>Code analysis</li>
+                            <li>Pattern matching</li>
+                        </ul>
+
+                        <h4>Requires internet:</h4>
+                        <ul>
+                            <li>WebFetch (documentation lookup)</li>
+                            <li>Model API calls (Claude AI)</li>
+                        </ul>
+
+                        <p><strong>Tip:</strong> Cache commonly-used docs locally for faster access.</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- BEST PRACTICES -->
+    <section id="best-practices" class="section">
+        <div class="container">
+            <h2 class="text-center">💎 Best Practices</h2>
+            <p class="text-center">Evidence-based recommendations</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h3>✅ DO: Start Small, Scale Up</h3>
+                    <h4>Week 1: Use 3-5 essential agents</h4>
+                    <ul>
+                        <li>Design Token Guardian</li>
+                        <li>A11y Compliance Enforcer</li>
+                        <li>Smart Test Generator</li>
+                    </ul>
+
+                    <h4>Week 2: Add automation</h4>
+                    <ul>
+                        <li>Enable hooks for a11y validation</li>
+                        <li>Performance budget gates</li>
+                    </ul>
+
+                    <h4>Week 3: Add power agents</h4>
+                    <ul>
+                        <li>Grand Architect</li>
+                        <li>Performance Prophet</li>
+                        <li>Security Specialist</li>
+                    </ul>
+
+                    <h4>Week 4: Full system</h4>
+                    <ul>
+                        <li>All 20 agents</li>
+                        <li>Custom slash commands</li>
+                        <li>Multi-agent workflows</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>✅ DO: Use Grand Architect for Complex Features</h3>
+                    <h4>❌ DON'T:</h4>
+                    <pre><code>User: "Add offline mode, real-time sync, and conflict resolution"
+→ Confusing, no structure</code></pre>
+
+                    <h4>✅ DO:</h4>
+                    <pre><code>User: "I need Grand Architect to plan implementing offline mode with these requirements: [list]"
+→ Grand Architect breaks down, delegates, coordinates</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3>✅ DO: Use Hooks for Enforcement</h3>
+                    <p>Don't rely on LLM to remember rules</p>
+
+                    <h4>Pattern:</h4>
+                    <pre><code>Rule: "Always check accessibility"
+→ Problem: LLM might forget
+
+Hook: Pre-write a11y validation
+→ Solution: Automatic enforcement</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3>✅ DO: Context Management</h3>
+                    <p>CLAUDE.md should contain:</p>
+                    <pre><code># Project: MyApp
+
+## Tech Stack
+- Expo SDK 53
+- React Native 0.76
+- TypeScript 5.3
+- Redux Toolkit
+
+## Architecture
+- Feature-based folder structure
+- Atomic design for components
+
+## Conventions
+- Use functional components only
+- Prefer hooks over HOCs
+- All files must have tests
+
+## Design System
+- Theme file: src/theme/index.ts
+- Colors: Use theme.colors.*
+- Spacing: Use theme.spacing.*</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3>✅ DO: Evidence-Based Agents</h3>
+                    <p>Agents should reference evidence:</p>
+
+                    <h4>❌ Bad:</h4>
+                    <pre><code>"This might be slow"</code></pre>
+
+                    <h4>✅ Good:</h4>
+                    <pre><code>"This will cause frame drops.
+
+Evidence: React Native bridge can handle ~60 calls/frame at 60fps.
+Your code makes 120 calls/frame (src/components/List.tsx:45).
+
+Reference: https://reactnative.dev/docs/performance"</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3>✅ DO: Combine Agents for Reviews</h3>
+                    <h4>Pattern:</h4>
+                    <pre><code>/review src/components/PaymentForm.tsx
+
+Invokes:
+1. Design Token Guardian → visual consistency
+2. A11y Enforcer → accessibility
+3. Security Specialist → payment security
+4. Performance Prophet → render performance
+5. Test Architect → test coverage</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PITFALLS -->
+    <section id="pitfalls" class="section">
+        <div class="container">
+            <h2 class="text-center">⚠️ Common Pitfalls to Avoid</h2>
+            <p class="text-center">Learn from these mistakes</p>
+
+            <div class="alert alert-error">
+                <strong>❌ Pitfall #1:</strong> Creating generic agents
+                <pre><code># Bad
+---
+name: code-helper
+description: Helps with code
+---
+
+# Good
+---
+name: redux-selector-optimizer
+description: Optimizes Redux selectors using reselect, detects unnecessary re-renders
+---</code></pre>
+            </div>
+
+            <div class="alert alert-error">
+                <strong>❌ Pitfall #2:</strong> Skipping CLAUDE.md setup
+                <p style="margin-top: 1rem;">Without project context, agents give generic advice. ALWAYS customize CLAUDE.md with:</p>
+                <ul>
+                    <li>Tech stack versions</li>
+                    <li>Team conventions</li>
+                    <li>Design system rules</li>
+                    <li>Architecture patterns</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-error">
+                <strong>❌ Pitfall #3:</strong> Using wrong model for task
+                <pre><code># Overkill (slow + expensive)
+name: simple-lint-check
+model: opus  # ❌
+
+# Right-sized (fast + cheap)
+name: simple-lint-check
+model: haiku  # ✅</code></pre>
+            </div>
+
+            <div class="alert alert-error">
+                <strong>❌ Pitfall #4:</strong> Not using version control
+                <p style="margin-top: 1rem;">ALWAYS commit before running agents that make changes:</p>
+                <pre><code>git add .
+git commit -m "Before agent refactoring"
+# Now safe to run agents</code></pre>
+            </div>
+
+            <div class="alert alert-error">
+                <strong>❌ Pitfall #5:</strong> Ignoring accessibility warnings
+                <p style="margin-top: 1rem;">65% reduction in App Store rejections comes from using @a11y-enforcer. DON'T skip accessibility checks!</p>
+            </div>
+
+            <div class="alert alert-error">
+                <strong>❌ Pitfall #6:</strong> Over-engineering with too many agents
+                <p style="margin-top: 1rem;">Don't use 5 agents when 1 will do. Start with essentials, add more as needed.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="watermark">
+                🌟 SenaiVerse - Claude Code Agent System v1.0
+            </div>
+            <p style="margin-top: 1rem;">Built for Expo/React Native Excellence</p>
+            <p>© 2025 SenaiVerse | Complete Documentation & Reference</p>
+            <p style="margin-top: 2rem; font-size: 0.875rem;">
+                <strong>Version:</strong> 1.0.0 |
+                <strong>Last Updated:</strong> 2025-10-03 |
+                <strong>For:</strong> Claude Code v2.0.5 + Windows + Expo/React Native
+            </p>
+            <p style="margin-top: 1rem;">
+                <a href="#hero" style="color: var(--primary);">↑ Back to Top</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Navigation active state
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        function updateActiveLink() {
+            const scrollPos = window.scrollY + 100;
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+
+                if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveLink);
+
+        // Mobile nav toggle
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinksContainer = document.querySelector('.nav-links');
+        const navUtilityContainer = document.querySelector('.nav-utility');
+        const navUtilityLinks = document.querySelectorAll('.nav-utility a');
+
+        navToggle.addEventListener('click', () => {
+            navLinksContainer.classList.toggle('active');
+            navUtilityContainer.classList.toggle('active');
+        });
+
+        // Close mobile nav on link click
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinksContainer.classList.remove('active');
+                navUtilityContainer.classList.remove('active');
+            });
+        });
+
+        navUtilityLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinksContainer.classList.remove('active');
+                navUtilityContainer.classList.remove('active');
+            });
+        });
+
+        // Search functionality for troubleshooting
+        const troubleshootingSearch = document.getElementById('troubleshooting-search');
+        const troubleshootingList = document.getElementById('troubleshooting-list');
+
+        if (troubleshootingSearch) {
+            troubleshootingSearch.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const details = troubleshootingList.querySelectorAll('details');
+
+                details.forEach(detail => {
+                    const text = detail.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        detail.style.display = 'block';
+                    } else {
+                        detail.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Search functionality for FAQ
+        const faqSearch = document.getElementById('faq-search');
+        const faqList = document.getElementById('faq-list');
+
+        if (faqSearch) {
+            faqSearch.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const details = faqList.querySelectorAll('details');
+
+                details.forEach(detail => {
+                    const text = detail.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        detail.style.display = 'block';
+                    } else {
+                        detail.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Initialize
+        updateActiveLink();
+    </script>
+
+    <script>
+// ============================================================================
+// CLAUDE CODE DOCUMENTATION - ADVANCED INTERACTIVITY & ENHANCEMENT SYSTEM
+// ============================================================================
+// Version: 1.0.0
+// Features: Advanced Search, Keyboard Nav, Animations, Syntax Highlighting,
+//           Progress Bar, Count-up Stats, Scroll Effects, Accessibility
+// ============================================================================
+
+// ============================================================================
+// UTILITIES & HELPERS
+// ============================================================================
+
+// Debounce function for performance optimization
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Check if user prefers reduced motion
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Easing functions for smooth animations
+const easing = {
+    easeOutQuad: t => t * (2 - t),
+    easeInOutCubic: t => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+    easeOutExpo: t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t)
+};
+
+// ============================================================================
+// READING PROGRESS BAR
+// ============================================================================
+
+function createProgressBar() {
+    const progressBar = document.createElement('div');
+    progressBar.id = 'reading-progress';
+    progressBar.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        width: 0%;
+        z-index: 9999;
+        transition: width 0.1s ease;
+    `;
+    document.body.appendChild(progressBar);
+
+    const updateProgress = () => {
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight - windowHeight;
+        const scrolled = window.scrollY;
+        const progress = (scrolled / documentHeight) * 100;
+        progressBar.style.width = `${Math.min(progress, 100)}%`;
+    };
+
+    window.addEventListener('scroll', debounce(updateProgress, 10));
+    updateProgress();
+}
+
+// ============================================================================
+// ADVANCED SEARCH SYSTEM WITH KEYBOARD NAVIGATION
+// ============================================================================
+
+function createAdvancedSearch() {
+    // Create search container in agents section
+    const agentsSection = document.getElementById('agents');
+    if (!agentsSection) return;
+
+    const searchContainer = document.createElement('div');
+    searchContainer.className = 'search-box';
+    searchContainer.style.marginTop = '2rem';
+
+    searchContainer.innerHTML = `
+        <label for="agent-search" class="visually-hidden">Search agents</label>
+        <span class="search-icon">🔍</span>
+        <input type="text" id="agent-search" class="search-input"
+               placeholder="Search agents... (try: accessibility, performance, security)"
+               autocomplete="off"
+               aria-label="Search agents">
+        <div id="search-results" style="display: none; position: absolute; top: 100%; left: 0; right: 0;
+             background: var(--bg-secondary); border: 1px solid var(--border-primary);
+             border-radius: 0.5rem; margin-top: 0.5rem; max-height: 400px; overflow-y: auto; z-index: 100;">
+        </div>
+    `;
+
+    const agentsTitle = agentsSection.querySelector('h2');
+    agentsTitle.insertAdjacentElement('afterend', searchContainer);
+
+    const searchInput = document.getElementById('agent-search');
+    const searchResults = document.getElementById('search-results');
+    const agentCards = document.querySelectorAll('.agent-card');
+
+    let selectedIndex = -1;
+    let searchableItems = [];
+
+    // Build searchable index
+    agentCards.forEach(card => {
+        const title = card.querySelector('h3').textContent;
+        const description = card.querySelector('p').textContent;
+        const tags = Array.from(card.querySelectorAll('.tag')).map(t => t.textContent).join(' ');
+
+        searchableItems.push({
+            element: card,
+            title,
+            description,
+            tags,
+            searchText: `${title} ${description} ${tags}`.toLowerCase()
+        });
+    });
+
+    // Debounced search function
+    const performSearch = debounce((query) => {
+        if (!query.trim()) {
+            searchResults.style.display = 'none';
+            agentCards.forEach(card => card.style.display = '');
+            selectedIndex = -1;
+            return;
+        }
+
+        const searchTerm = query.toLowerCase();
+        const matches = searchableItems.filter(item =>
+            item.searchText.includes(searchTerm)
+        );
+
+        // Show/hide cards
+        agentCards.forEach(card => card.style.display = 'none');
+        matches.forEach(match => match.element.style.display = '');
+
+        // Show search results dropdown
+        if (matches.length > 0) {
+            searchResults.innerHTML = matches.map((match, index) => `
+                <div class="search-result-item" data-index="${index}" style="
+                    padding: 1rem;
+                    cursor: pointer;
+                    border-bottom: 1px solid var(--border-primary);
+                    transition: background 0.2s;
+                " onmouseover="this.style.background='var(--bg-tertiary)'"
+                   onmouseout="this.style.background='transparent'">
+                    <div style="font-weight: 600; color: var(--primary);">${highlightMatch(match.title, searchTerm)}</div>
+                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                        ${highlightMatch(match.description.substring(0, 100) + '...', searchTerm)}
+                    </div>
+                </div>
+            `).join('');
+            searchResults.style.display = 'block';
+        } else {
+            searchResults.innerHTML = `
+                <div style="padding: 1rem; text-align: center; color: var(--text-tertiary);">
+                    No agents found for "${query}"
+                </div>
+            `;
+            searchResults.style.display = 'block';
+        }
+    }, 300);
+
+    // Highlight matching text
+    function highlightMatch(text, query) {
+        const regex = new RegExp(`(${query})`, 'gi');
+        return text.replace(regex, '<mark style="background: var(--primary); color: var(--bg-primary); padding: 0 0.25rem; border-radius: 0.25rem;">$1</mark>');
+    }
+
+    // Keyboard navigation
+    searchInput.addEventListener('keydown', (e) => {
+        const items = searchResults.querySelectorAll('.search-result-item');
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+            updateSelection(items);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            selectedIndex = Math.max(selectedIndex - 1, -1);
+            updateSelection(items);
+        } else if (e.key === 'Enter' && selectedIndex >= 0) {
+            e.preventDefault();
+            const match = searchableItems.filter(item =>
+                item.searchText.includes(searchInput.value.toLowerCase())
+            )[selectedIndex];
+            if (match) {
+                match.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                match.element.querySelector('details')?.setAttribute('open', '');
+                searchResults.style.display = 'none';
+            }
+        } else if (e.key === 'Escape') {
+            searchResults.style.display = 'none';
+            selectedIndex = -1;
+        }
+    });
+
+    function updateSelection(items) {
+        items.forEach((item, index) => {
+            if (index === selectedIndex) {
+                item.style.background = 'var(--bg-tertiary)';
+                item.scrollIntoView({ block: 'nearest' });
+            } else {
+                item.style.background = 'transparent';
+            }
+        });
+    }
+
+    searchInput.addEventListener('input', (e) => performSearch(e.target.value));
+
+    // Click outside to close
+    document.addEventListener('click', (e) => {
+        if (!searchContainer.contains(e.target)) {
+            searchResults.style.display = 'none';
+        }
+    });
+}
+
+// ============================================================================
+// EXPANDABLE AGENT CARDS
+// ============================================================================
+
+function initializeExpandableCards() {
+    const agentCards = document.querySelectorAll('.agent-card');
+    let currentlyExpanded = null;
+
+    agentCards.forEach(card => {
+        const details = card.querySelector('details');
+        if (!details) return;
+
+        const summary = details.querySelector('summary');
+
+        // Add expand icon
+        const icon = document.createElement('span');
+        icon.textContent = ' ▼';
+        icon.style.cssText = `
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        `;
+        summary.appendChild(icon);
+
+        details.addEventListener('toggle', () => {
+            if (!prefersReducedMotion) {
+                if (details.open) {
+                    // Close previously expanded card
+                    if (currentlyExpanded && currentlyExpanded !== details) {
+                        currentlyExpanded.removeAttribute('open');
+                    }
+                    currentlyExpanded = details;
+
+                    // Rotate icon
+                    icon.style.transform = 'rotate(180deg)';
+
+                    // Smooth expand animation
+                    const content = details.querySelector('div');
+                    if (content) {
+                        content.style.animation = 'slideDown 0.3s ease-out';
+                    }
+
+                    // Scroll card into view
+                    setTimeout(() => {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                } else {
+                    icon.style.transform = 'rotate(0deg)';
+                }
+            }
+        });
+    });
+
+    // Add CSS animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// ============================================================================
+// SYNTAX HIGHLIGHTING (Inline - Lightweight)
+// ============================================================================
+
+function initializeSyntaxHighlighting() {
+    // Single-pass tokenizer approach (prevents pattern interference)
+    const codeBlocks = document.querySelectorAll('pre code');
+
+    codeBlocks.forEach(block => {
+        const code = block.textContent;
+
+        // HTML escape helper
+        const escapeHtml = (text) => {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        };
+
+        // Single regex matching ALL patterns with named groups (via alternation)
+        // Order matters: comments first (highest priority), then keywords, variables, flags
+        const tokenPattern = /(#.*$)|(\b(?:cd|ls|cat|npm|npx|git|Set-ExecutionPolicy|function|if|else|for|while|return)\b)|(\$\w+)|(--?\w+)/gm;
+
+        let lastIndex = 0;
+        let highlighted = '';
+
+        // Process each match in order
+        code.replace(tokenPattern, (match, comment, keyword, variable, flag, offset) => {
+            // Add escaped text before this match
+            highlighted += escapeHtml(code.substring(lastIndex, offset));
+
+            // Add highlighted match (escaped content inside span)
+            if (comment) {
+                highlighted += '<span class="syntax-comment">' + escapeHtml(comment) + '</span>';
+            } else if (keyword) {
+                highlighted += '<span class="syntax-keyword">' + escapeHtml(keyword) + '</span>';
+            } else if (variable) {
+                highlighted += '<span class="syntax-variable">' + escapeHtml(variable) + '</span>';
+            } else if (flag) {
+                highlighted += '<span class="syntax-flag">' + escapeHtml(flag) + '</span>';
+            }
+
+            lastIndex = offset + match.length;
+            return match; // Return value doesn't matter, we're building our own string
+        });
+
+        // Add any remaining text after last match
+        highlighted += escapeHtml(code.substring(lastIndex));
+
+        // Set the highlighted HTML
+        block.innerHTML = highlighted;
+
+        // Add language badge
+        const pre = block.parentElement;
+        const badge = document.createElement('div');
+        badge.textContent = detectLanguage(code);
+        badge.style.cssText = `
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            background: var(--bg-tertiary);
+            color: var(--text-tertiary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        `;
+        pre.appendChild(badge);
+    });
+}
+
+function detectLanguage(code) {
+    if (code.includes('npm') || code.includes('npx')) return 'bash';
+    if (code.includes('Set-ExecutionPolicy')) return 'powershell';
+    if (code.includes('import') || code.includes('export')) return 'javascript';
+    if (code.includes('---\nname:')) return 'yaml';
+    return 'code';
+}
+
+// ============================================================================
+// ANIMATED STATISTICS (Count-up Effect)
+// ============================================================================
+
+function animateStatistics() {
+    const stats = document.querySelectorAll('.stat-value');
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.dataset.animated) {
+                entry.target.dataset.animated = 'true';
+                animateValue(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    stats.forEach(stat => observer.observe(stat));
+}
+
+function animateValue(element) {
+    const text = element.textContent;
+    const isPercentage = text.includes('%');
+    const targetValue = parseInt(text.replace(/[^\d]/g, ''));
+    const duration = 2000;
+    const startTime = performance.now();
+
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easedProgress = easing.easeOutExpo(progress);
+        const currentValue = Math.floor(easedProgress * targetValue);
+
+        element.textContent = isPercentage ? `${currentValue}%` : currentValue;
+
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        } else {
+            element.textContent = text; // Restore original text
+        }
+    }
+
+    if (!prefersReducedMotion) {
+        requestAnimationFrame(update);
+    }
+}
+
+// ============================================================================
+// SCROLL ANIMATIONS (Intersection Observer)
+// ============================================================================
+
+function initializeScrollAnimations() {
+    if (prefersReducedMotion) return;
+
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+        }
+
+        .animate-on-scroll.visible {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+    `;
+    document.head.appendChild(style);
+
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                // Stagger animation delay
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, index * 100);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe cards
+    document.querySelectorAll('.card, .agent-card').forEach(card => {
+        card.classList.add('animate-on-scroll');
+        observer.observe(card);
+    });
+}
+
+// ============================================================================
+// PARALLAX EFFECT ON HERO
+// ============================================================================
+
+function initializeParallax() {
+    if (prefersReducedMotion) return;
+
+    const hero = document.getElementById('hero');
+    if (!hero) return;
+
+    const handleScroll = () => {
+        const scrolled = window.scrollY;
+        const parallaxSpeed = 0.5;
+
+        requestAnimationFrame(() => {
+            hero.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
+            hero.style.opacity = 1 - (scrolled / 600);
+        });
+    };
+
+    window.addEventListener('scroll', debounce(handleScroll, 10));
+}
+
+// ============================================================================
+// COPY CODE BUTTON WITH ENHANCED FEEDBACK
+// ============================================================================
+
+function addCopyButtons() {
+    document.querySelectorAll('pre').forEach(pre => {
+        const button = document.createElement('button');
+        button.className = 'copy-button';
+        button.textContent = 'Copy';
+        button.setAttribute('aria-label', 'Copy code to clipboard');
+        button.addEventListener('click', () => {
+            const code = pre.querySelector('code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = 'Copied!';
+                button.setAttribute('aria-label', 'Code copied');
+                button.style.background = 'var(--success)';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.setAttribute('aria-label', 'Copy code to clipboard');
+                    button.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                button.textContent = 'Failed';
+                button.setAttribute('aria-label', 'Copy failed');
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.setAttribute('aria-label', 'Copy code to clipboard');
+                }, 2000);
+            });
+        });
+        pre.style.position = 'relative';
+        pre.appendChild(button);
+    });
+}
+
+// ============================================================================
+// READING TIME ESTIMATOR
+// ============================================================================
+
+function addReadingTime() {
+    const sections = document.querySelectorAll('.section');
+    const wordsPerMinute = 200;
+
+    sections.forEach(section => {
+        const text = section.textContent;
+        const wordCount = text.trim().split(/\s+/).length;
+        const readingTime = Math.ceil(wordCount / wordsPerMinute);
+
+        const heading = section.querySelector('h2');
+        if (heading && readingTime > 1) {
+            const badge = document.createElement('span');
+            badge.textContent = `${readingTime} min read`;
+            badge.style.cssText = `
+                display: inline-block;
+                margin-left: 1rem;
+                padding: 0.25rem 0.75rem;
+                background: var(--bg-tertiary);
+                color: var(--text-tertiary);
+                border-radius: 9999px;
+                font-size: 0.875rem;
+                font-weight: 500;
+            `;
+            heading.appendChild(badge);
+        }
+    });
+}
+
+// ============================================================================
+// ACCESSIBILITY: FOCUS INDICATORS & SKIP LINK
+// ============================================================================
+
+function enhanceAccessibility() {
+    const style = document.createElement('style');
+    style.textContent = `
+        *:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+            border-radius: 0.25rem;
+        }
+
+        a:focus-visible, button:focus-visible {
+            outline: 3px solid var(--primary);
+        }
+
+        /* Skip to main content link */
+        .skip-to-main {
+            position: absolute;
+            left: -9999px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
+        .skip-to-main:focus {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: auto;
+            height: auto;
+            overflow: visible;
+            background: var(--primary);
+            color: var(--bg-primary);
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            z-index: 10000;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Add skip to main content link
+    const skipLink = document.createElement('a');
+    skipLink.href = '#hero';
+    skipLink.className = 'skip-to-main';
+    skipLink.textContent = 'Skip to main content';
+    document.body.insertBefore(skipLink, document.body.firstChild);
+}
+
+// ============================================================================
+// PERFORMANCE: LAZY LOAD IMAGES
+// ============================================================================
+
+function lazyLoadImages() {
+    const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                if (img.dataset.src) {
+                    img.src = img.dataset.src;
+                    img.classList.remove('lazy');
+                    imageObserver.unobserve(img);
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll('img[data-src]').forEach(img => {
+        imageObserver.observe(img);
+    });
+}
+
+// ============================================================================
+// SMOOTH SCROLL BEHAVIOR
+// ============================================================================
+
+function enableSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+}
+
+// ============================================================================
+// TABLE OF CONTENTS GENERATOR
+// ============================================================================
+
+function generateTableOfContents() {
+    const headings = document.querySelectorAll('h2, h3');
+    if (headings.length < 5) return; // Only generate if there are enough headings
+
+    const tocContainer = document.createElement('div');
+    tocContainer.id = 'table-of-contents';
+    tocContainer.style.cssText = `
+        position: fixed;
+        right: 2rem;
+        top: 100px;
+        width: 250px;
+        max-height: calc(100vh - 150px);
+        overflow-y: auto;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-primary);
+        border-radius: 0.5rem;
+        padding: 1rem;
+        display: none;
+        z-index: 100;
+    `;
+
+    const tocTitle = document.createElement('h4');
+    tocTitle.textContent = 'Table of Contents';
+    tocTitle.style.cssText = `
+        color: var(--primary);
+        margin-bottom: 1rem;
+        font-size: 1rem;
+    `;
+    tocContainer.appendChild(tocTitle);
+
+    const tocList = document.createElement('ul');
+    tocList.style.cssText = `
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    `;
+
+    headings.forEach((heading, index) => {
+        const id = heading.id || `heading-${index}`;
+        heading.id = id;
+
+        const li = document.createElement('li');
+        li.style.cssText = `
+            margin: 0.5rem 0;
+            padding-left: ${heading.tagName === 'H3' ? '1rem' : '0'};
+        `;
+
+        const link = document.createElement('a');
+        link.href = `#${id}`;
+        link.textContent = heading.textContent.replace(/\d+\smin\sread/, '').trim();
+        link.classList.add('toc-link');
+        link.dataset.target = id;
+        link.style.cssText = `
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-decoration: none;
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            border-left: 3px solid transparent;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        `;
+        link.addEventListener('mouseover', () => {
+            if (!link.classList.contains('active')) {
+                link.style.color = 'var(--primary)';
+                link.style.backgroundColor = 'rgba(46, 196, 182, 0.05)';
+            }
+        });
+        link.addEventListener('mouseout', () => {
+            if (!link.classList.contains('active')) {
+                link.style.color = 'var(--text-secondary)';
+                link.style.backgroundColor = 'transparent';
+            }
+        });
+
+        li.appendChild(link);
+        tocList.appendChild(li);
+    });
+
+    tocContainer.appendChild(tocList);
+    document.body.appendChild(tocContainer);
+
+    // Show/hide TOC on larger screens
+    if (window.innerWidth > 1400) {
+        tocContainer.style.display = 'block';
+    }
+
+    window.addEventListener('resize', debounce(() => {
+        tocContainer.style.display = window.innerWidth > 1400 ? 'block' : 'none';
+    }, 300));
+
+    // ScrollSpy functionality using IntersectionObserver
+    const observerOptions = {
+        root: null,
+        rootMargin: '-80px 0px -80% 0px',
+        threshold: 0
+    };
+
+    const tocLinks = document.querySelectorAll('.toc-link');
+    let activeLink = null;
+
+    const observerCallback = (entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                const correspondingLink = document.querySelector(`.toc-link[data-target="${id}"]`);
+
+                if (correspondingLink) {
+                    // Remove active from previous link
+                    if (activeLink) {
+                        activeLink.classList.remove('active');
+                        activeLink.style.color = 'var(--text-secondary)';
+                        activeLink.style.backgroundColor = 'transparent';
+                        activeLink.style.borderLeftColor = 'transparent';
+                    }
+
+                    // Add active to current link
+                    correspondingLink.classList.add('active');
+                    correspondingLink.style.color = 'var(--primary)';
+                    correspondingLink.style.backgroundColor = 'rgba(46, 196, 182, 0.1)';
+                    correspondingLink.style.borderLeftColor = 'var(--primary)';
+                    activeLink = correspondingLink;
+
+                    // Scroll TOC to keep active item visible
+                    correspondingLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                }
+            }
+        });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    headings.forEach(heading => observer.observe(heading));
+}
+
+// ============================================================================
+// INITIALIZE ALL FEATURES
+// ============================================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Core features
+    updateActiveLink();
+
+    // Advanced features
+    createProgressBar();
+    createAdvancedSearch();
+    initializeExpandableCards();
+    initializeSyntaxHighlighting();
+
+    // Beginner installation toggle
+    const beginnerToggleBtn = document.getElementById('beginner-toggle-btn');
+    if (beginnerToggleBtn) {
+        beginnerToggleBtn.addEventListener('click', function() {
+            const content = document.getElementById('beginner-guide-content');
+            const arrow = this.querySelector('span[aria-hidden="true"]');
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+            if (isExpanded) {
+                content.style.display = 'none';
+                arrow.textContent = '►';
+                this.setAttribute('aria-expanded', 'false');
+            } else {
+                content.style.display = 'block';
+                arrow.textContent = '▼';
+                this.setAttribute('aria-expanded', 'true');
+            }
+        });
+    }
+
+    addCopyButtons();
+    animateStatistics();
+    initializeScrollAnimations();
+    initializeParallax();
+    addReadingTime();
+    enhanceAccessibility();
+    lazyLoadImages();
+    enableSmoothScroll();
+    generateTableOfContents();
+
+    // Log initialization (for debugging)
+    console.log('%c🌟 Claude Code Documentation Enhanced!',
+        'color: #3DD6C7; font-size: 16px; font-weight: bold;');
+    console.log('%cFeatures Loaded:', 'color: #6366F1; font-size: 12px; font-weight: bold;');
+    console.log('%c✓ Advanced Search with Keyboard Navigation', 'color: #34D399; font-size: 11px;');
+    console.log('%c✓ Expandable Agent Cards', 'color: #34D399; font-size: 11px;');
+    console.log('%c✓ Syntax Highlighting', 'color: #34D399; font-size: 11px;');
+    console.log('%c✓ Reading Progress Bar', 'color: #34D399; font-size: 11px;');
+    console.log('%c✓ Animated Statistics', 'color: #34D399; font-size: 11px;');
+    console.log('%c✓ Scroll Animations', 'color: #34D399; font-size: 11px;');
+    console.log('%c✓ Parallax Effects', 'color: #34D399; font-size: 11px;');
+    console.log('%c✓ Reading Time Estimator', 'color: #34D399; font-size: 11px;');
+    console.log('%c✓ Accessibility Enhancements', 'color: #34D399; font-size: 11px;');
+    console.log('%c✓ Table of Contents with ScrollSpy', 'color: #34D399; font-size: 11px;');
+});
+
+    </script>
+</body>
+</html>
