@@ -580,7 +580,7 @@ Building tools that make React Native development faster and more reliable.
 
 **Connect:**
 - 💼 **Portfolio:** https://yourportfolio.com (update this)
-- 💻 **GitHub:** [@SenaiVerse](https://github.com/SenaiVerse)
+- 💻 **GitHub:** [@S-Toro-8](https://github.com/S-Toro-8)
 - 💬 **LinkedIn:** https://linkedin.com/in/yourprofile (update this)
 - 📧 **Email:** your.email@example.com (update this)
 - 🌐 **Website:** https://yourwebsite.com (update this)
@@ -589,8 +589,7 @@ Building tools that make React Native development faster and more reliable.
 React Native developer passionate about AI-augmented development, accessibility, and building production-ready mobile apps. This project represents my approach to systematic code quality and automated best practices enforcement.
 
 **Other Projects:**
-- [Awaze - AI Food Insights](https://github.com/SenaiVerse/awaze) - React Native nutrition app with AI-powered food analysis
-- [Add more projects here]
+- [Add your other portfolio projects here]
 
 ---
 
